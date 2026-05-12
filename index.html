@@ -66,19 +66,37 @@ body {
 .sidebar {
   background: var(--paper);
   border-right: 1px solid var(--hair);
-  padding: 22px 18px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow: hidden;
+}
+.sidebar-header {
+  flex-shrink: 0;
+  padding: 22px 18px 0;
+}
+.sidebar-menu {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 18px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hair) transparent;
+}
+.sidebar-menu::-webkit-scrollbar { width: 4px; }
+.sidebar-menu::-webkit-scrollbar-thumb { background: var(--hair); border-radius: 4px; }
+.sidebar-footer {
+  flex-shrink: 0;
+  padding: 0 18px 18px;
+  border-top: 1px solid var(--hair-2);
 }
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 4px 6px 22px;
+  padding: 4px 0 18px;
   border-bottom: 1px solid var(--hair-2);
   margin-bottom: 14px;
 }
@@ -743,9 +761,32 @@ body {
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ── Supabase auto-init from localStorage ──────────────────────
+(function() {
+  try {
+    var url = localStorage.getItem("sf_sb_url");
+    var key = localStorage.getItem("sf_sb_key");
+    if (url && key && window.supabase) {
+      window._supabase = window.supabase.createClient(url, key);
+      console.log("[SmartFarm] Supabase initialised from localStorage");
+    }
+  } catch(e) { console.warn("[SmartFarm] Supabase init:", e.message); }
+})();
+</script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script>
+// Tell Babel standalone to register env preset so async/await works
+Babel.registerPreset("env-react", {
+  presets: [
+    [Babel.availablePresets["env"], { targets: { chrome: "80" }, modules: false }],
+    [Babel.availablePresets["react"], {}],
+  ],
+});
+</script>
 
-<script type="text/babel" data-presets="react">
+<script type="text/babel" data-presets="env-react">
 /* SmartFarm shared components, icons, fake data */
 
 // ---------- ICONS (single-stroke, hairline) ----------
@@ -1113,105 +1154,254 @@ Object.assign(window, {
 });
 
 </script>
-<script type="text/babel" data-presets="react">
+<script type="text/babel" data-presets="env-react">
 /* SmartFarm — Login + Dashboard + Sensors + Devices */
 
 // ============ LOGIN ============
 function LoginPage({ onLogin }) {
-  const [email, setEmail] = React.useState("chai@kaimuk.farm");
-  const [pw, setPw] = React.useState("••••••••••");
-  const [role, setRole] = React.useState("Owner");
+  const [email,    setEmail]    = React.useState("");
+  const [pw,       setPw]       = React.useState("");
+  const [loading,  setLoading]  = React.useState(false);
+  const [gLoading, setGLoading] = React.useState(false);
+  const [err,      setErr]      = React.useState("");
+  const [mode,     setMode]     = React.useState("login");
+  const [sent,     setSent]     = React.useState(false);
 
-  return (
+  const getSb = () => window._supabase || null;
+
+  function handleEmailLogin(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!email.trim()) { setErr("กรุณากรอกอีเมล"); return; }
+    if (!pw.trim())    { setErr("กรุณากรอกรหัสผ่าน"); return; }
+    const sb = getSb();
+    if (!sb) { setErr("ยังไม่ได้ตั้งค่า Supabase — กรอก URL และ Key หรือใช้ Demo ก่อน"); return; }
+    setLoading(true); setErr("");
+    sb.auth.signInWithPassword({ email: email.trim(), password: pw })
+      .then(res => {
+        if (res.error) {
+          setErr(res.error.message === "Invalid login credentials" ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง" : res.error.message);
+          setLoading(false); return;
+        }
+        upsertProfile(sb, res.data.user);
+        fetchRole(sb, res.data.user).then(role => {
+          setLoading(false);
+          onLogin({ ...res.data.user, _role: role });
+        });
+      })
+      .catch(e => { setErr(e.message); setLoading(false); });
+  }
+
+  function handleRegister() {
+    if (!email.trim() || !pw.trim()) { setErr("กรุณากรอกอีเมลและรหัสผ่าน"); return; }
+    if (pw.length < 6) { setErr("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร"); return; }
+    const sb = getSb();
+    if (!sb) { setErr("ยังไม่ได้ตั้งค่า Supabase"); return; }
+    setLoading(true); setErr("");
+    sb.auth.signUp({ email: email.trim(), password: pw })
+      .then(res => {
+        setLoading(false);
+        if (res.error) { setErr(res.error.message); return; }
+        if (res.data.user && !res.data.user.email_confirmed_at) { setSent(true); }
+        else if (res.data.user) { upsertProfile(sb, res.data.user); onLogin(res.data.user); }
+      })
+      .catch(e => { setErr(e.message); setLoading(false); });
+  }
+
+  function handleReset() {
+    if (!email.trim()) { setErr("กรุณากรอกอีเมล"); return; }
+    const sb = getSb();
+    if (!sb) { setErr("ยังไม่ได้ตั้งค่า Supabase"); return; }
+    setLoading(true); setErr("");
+    sb.auth.resetPasswordForEmail(email.trim(), { redirectTo: window.location.origin })
+      .then(res => {
+        setLoading(false);
+        if (res.error) setErr(res.error.message); else setSent(true);
+      })
+      .catch(e => { setErr(e.message); setLoading(false); });
+  }
+
+  function handleGoogle() {
+    const sb = getSb();
+    if (!sb) { setErr("ยังไม่ได้ตั้งค่า Supabase — กรอก URL และ Key ก่อน"); return; }
+    setGLoading(true); setErr("");
+    sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin } })
+      .then(res => { if (res.error) { setErr(res.error.message); setGLoading(false); } })
+      .catch(e => { setErr(e.message); setGLoading(false); });
+  }
+
+  function handleDemo() {
+    onLogin({ id: "demo", email: "demo@smartfarm.local", user_metadata: { full_name: "Demo User", avatar_url: null }, _demo: true, _role: "Viewer" });
+  }
+
+  function saveSupabase() {
+    const urlEl = document.getElementById("sb-url");
+    const keyEl = document.getElementById("sb-key");
+    const url = (urlEl ? urlEl.value : "").trim();
+    const key = (keyEl ? keyEl.value : "").trim();
+    if (!url || !key) { setErr("กรุณากรอก URL และ Anon Key"); return; }
+    localStorage.setItem("sf_sb_url", url);
+    localStorage.setItem("sf_sb_key", key);
+    window._supabase = window.supabase.createClient(url, key);
+    setErr(""); pushToast("เชื่อมต่อ Supabase สำเร็จ", "success");
+  }
+
+  if (sent) return (
     <div className="login-shell">
       <div className="login-art">
         <div className="flex-c gap-3">
-          <div className="brand-mark" style={{width: 36, height: 36, borderRadius: 10}}>
-            <I.Leaf size={20} stroke="white"/>
-          </div>
-          <div>
-            <div className="serif" style={{fontSize: 22, letterSpacing: "-0.01em"}}>SmartFarm</div>
-            <div className="brand-sub">Kaimuk Monitoring System</div>
-          </div>
+          <div className="brand-mark" style={{width:36,height:36,borderRadius:10}}><I.Leaf size={20} stroke="white"/></div>
+          <div><div className="serif" style={{fontSize:22}}>SmartFarm</div><div className="brand-sub">Kaimuk Monitoring System</div></div>
         </div>
+      </div>
+      <div className="login-form-wrap">
+        <div style={{width:"100%",maxWidth:340,textAlign:"center"}}>
+          <div style={{width:64,height:64,borderRadius:16,background:"var(--sage-soft)",display:"grid",placeItems:"center",margin:"0 auto 20px"}}>
+            <I.Check size={28} stroke="var(--sage-2)"/>
+          </div>
+          <div className="serif" style={{fontSize:22,marginBottom:8}}>{mode === "reset" ? "ส่งลิงก์รีเซ็ตแล้ว" : "ยืนยันอีเมล"}</div>
+          <div className="muted small" style={{lineHeight:1.6}}>{mode === "reset" ? "เช็คอีเมลและคลิกลิงก์รีเซ็ต" : "เช็คอีเมลและคลิกลิงก์ยืนยัน แล้วกลับมาล็อกอิน"}</div>
+          <button className="btn mt-6 w-full" style={{justifyContent:"center"}} onClick={() => { setSent(false); setMode("login"); }}>← กลับหน้าเข้าสู่ระบบ</button>
+        </div>
+      </div>
+    </div>
+  );
 
-        <div style={{maxWidth: 480}}>
+  return (
+    <div className="login-shell">
+      {/* Left art panel */}
+      <div className="login-art">
+        <div className="flex-c gap-3">
+          <div className="brand-mark" style={{width:36,height:36,borderRadius:10}}><I.Leaf size={20} stroke="white"/></div>
+          <div><div className="serif" style={{fontSize:22,letterSpacing:"-0.01em"}}>SmartFarm</div><div className="brand-sub">Kaimuk Monitoring System</div></div>
+        </div>
+        <div style={{maxWidth:480}}>
           <div className="muted small uc mb-3">เกษตรอัจฉริยะ — ปลูก เฝ้าระวัง เก็บเกี่ยว</div>
-          <h1 className="serif" style={{fontSize: 48, fontWeight: 400, letterSpacing: "-0.025em", lineHeight: 1.1, margin: "8px 0 22px"}}>
-            ฟาร์มที่<span style={{fontStyle: "italic", color: "var(--sage-2)"}}>เข้าใจ</span>ตัวเอง<br/>
+          <h1 className="serif" style={{fontSize:48,fontWeight:400,letterSpacing:"-0.025em",lineHeight:1.1,margin:"8px 0 22px"}}>
+            ฟาร์มที่<span style={{fontStyle:"italic",color:"var(--sage-2)"}}>เข้าใจ</span>ตัวเอง<br/>
             ผ่านสายตา 248 ตัวเซ็นเซอร์
           </h1>
-          <div className="muted" style={{fontSize: 14, maxWidth: 380}}>
-            ระบบ Smart Farm Monitoring สำหรับเจ้าของฟาร์ม พนักงานภาคสนาม
-            และผู้ดูแลระบบ — ดูข้อมูลแบบ real-time ควบคุมอุปกรณ์ IoT
-            และวิเคราะห์ด้วย AI ในที่เดียว
-          </div>
+          <div className="muted" style={{fontSize:14,maxWidth:380}}>ระบบ Smart Farm Monitoring สำหรับเจ้าของฟาร์ม พนักงานภาคสนาม และผู้ดูแลระบบ</div>
         </div>
-
         <div className="flex gap-4 small mono muted">
-          <div className="flex-c gap-2"><span className="ddot" style={{width:6,height:6,borderRadius:999,background:"var(--sage)"}}/> 248 SENSORS ONLINE</div>
-          <div className="flex-c gap-2"><span className="ddot" style={{width:6,height:6,borderRadius:999,background:"var(--warn)"}}/> 2 WARNINGS</div>
+          <div className="flex-c gap-2"><span style={{width:6,height:6,borderRadius:999,background:"var(--sage)"}}/> 248 SENSORS ONLINE</div>
+          <div className="flex-c gap-2"><span style={{width:6,height:6,borderRadius:999,background:"var(--warn)"}}/> 2 WARNINGS</div>
           <div>v 2.4.1 · BUILD 2026.05</div>
         </div>
       </div>
 
+      {/* Right form panel */}
       <div className="login-form-wrap">
-        <div style={{width: "100%", maxWidth: 340}}>
-          <div className="muted small uc mb-2">เข้าสู่ระบบ</div>
-          <h2 className="serif" style={{fontSize: 26, fontWeight: 500, letterSpacing: "-0.01em", margin: "4px 0 22px"}}>
-            ยินดีต้อนรับกลับสู่ฟาร์ม
+        <div style={{width:"100%",maxWidth:360}}>
+
+          {!window._supabase && (
+            <div style={{background:"var(--warn-soft)",border:"1px solid var(--warn)",borderRadius:10,padding:"12px 14px",marginBottom:18,fontSize:12}}>
+              <div style={{fontWeight:600,color:"var(--warn)",marginBottom:4,fontFamily:"var(--f-mono)"}}>⚙️ ยังไม่ได้เชื่อม Supabase</div>
+              <div className="muted" style={{lineHeight:1.6}}>กรอก config ด้านล่าง หรือกด <strong>ทดลองใช้ Demo</strong> เพื่อดูระบบก่อน</div>
+            </div>
+          )}
+
+          <div className="muted small uc mb-2">{mode === "login" ? "เข้าสู่ระบบ" : mode === "register" ? "สมัครสมาชิก" : "รีเซ็ตรหัสผ่าน"}</div>
+          <h2 className="serif" style={{fontSize:26,fontWeight:500,letterSpacing:"-0.01em",margin:"4px 0 20px"}}>
+            {mode === "login" ? "ยินดีต้อนรับกลับสู่ฟาร์ม" : mode === "register" ? "สร้างบัญชีใหม่" : "ลืมรหัสผ่าน?"}
           </h2>
 
+          {err && (
+            <div style={{background:"var(--danger-soft)",color:"var(--danger)",padding:"10px 14px",borderRadius:8,fontSize:12,marginBottom:16,borderLeft:"3px solid var(--danger)",lineHeight:1.5}}>
+              {err}
+            </div>
+          )}
+
+          {/* Google OAuth button */}
+          {mode !== "reset" && (
+            <>
+              <button className="btn w-full" style={{justifyContent:"center",padding:"11px",marginBottom:8,gap:10}} onClick={handleGoogle} disabled={gLoading}>
+                {gLoading
+                  ? <div style={{width:15,height:15,border:"2px solid var(--ink)",borderTopColor:"transparent",borderRadius:"50%",animation:"lspin 0.7s linear infinite"}}/>
+                  : <svg width="16" height="16" viewBox="0 0 24 24" style={{flexShrink:0}}><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                }
+                เข้าสู่ระบบด้วย Google
+              </button>
+              <div className="flex-c gap-3 mb-3">
+                <div style={{flex:1,height:1,background:"var(--hair-2)"}}/>
+                <span className="tiny mono muted">หรือใช้อีเมล</span>
+                <div style={{flex:1,height:1,background:"var(--hair-2)"}}/>
+              </div>
+            </>
+          )}
+
+          {/* Email / Password fields */}
           <div className="field">
             <label>อีเมล</label>
-            <input value={email} onChange={e => setEmail(e.target.value)} />
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" autoComplete="email"/>
           </div>
-          <div className="field">
-            <label>รหัสผ่าน</label>
-            <input type="password" value={pw} onChange={e => setPw(e.target.value)} />
-          </div>
-          <div className="field">
-            <label>เข้าสู่ระบบในฐานะ</label>
-            <div className="grid g-2" style={{gap: 6}}>
-              {["Owner","Admin","Farm Staff","Viewer"].map(r => (
-                <div key={r} onClick={() => setRole(r)}
-                     style={{
-                       border: `1px solid ${role === r ? "var(--ink)" : "var(--hair)"}`,
-                       background: role === r ? "var(--ink)" : "var(--paper)",
-                       color: role === r ? "var(--paper)" : "var(--ink-2)",
-                       padding: "8px 10px", borderRadius: 8, fontSize: 12, cursor: "pointer", textAlign: "center"
-                     }}>
-                  {r}
-                </div>
-              ))}
+          {mode !== "reset" && (
+            <div className="field">
+              <label>รหัสผ่าน</label>
+              <input type="password" value={pw} onChange={e => setPw(e.target.value)} placeholder="อย่างน้อย 6 ตัวอักษร" autoComplete={mode === "login" ? "current-password" : "new-password"}/>
             </div>
-          </div>
+          )}
+          {mode === "login" && (
+            <div className="flex-cb mb-4 small">
+              <label className="flex-c gap-2 muted" style={{cursor:"pointer"}}><input type="checkbox" defaultChecked style={{accentColor:"var(--sage-2)"}}/> จำการเข้าสู่ระบบ</label>
+              <button type="button" style={{background:"none",border:"none",cursor:"pointer",textDecoration:"underline",textDecorationColor:"var(--hair)",color:"var(--muted)",fontSize:"inherit",padding:0}}
+                onClick={() => { setMode("reset"); setErr(""); }}>ลืมรหัสผ่าน?</button>
+            </div>
+          )}
 
-          <div className="flex-cb mb-4 small">
-            <label className="flex-c gap-2 muted" style={{cursor: "pointer"}}>
-              <input type="checkbox" defaultChecked style={{accentColor: "var(--sage-2)"}}/> จำการเข้าสู่ระบบ
-            </label>
-            <a href="#" className="muted" style={{textDecoration: "underline", textDecorationColor: "var(--hair)"}}>ลืมรหัสผ่าน?</a>
-          </div>
-
-          <button className="btn primary w-full" style={{justifyContent: "center", padding: "12px"}} onClick={onLogin}>
-            เข้าสู่ระบบ <I.Right size={14}/>
+          <button className="btn primary w-full" style={{justifyContent:"center",padding:"12px",gap:8}} disabled={loading}
+            onClick={mode === "login" ? handleEmailLogin : mode === "register" ? handleRegister : handleReset}>
+            {loading
+              ? <div style={{width:16,height:16,border:"2px solid white",borderTopColor:"transparent",borderRadius:"50%",animation:"lspin 0.7s linear infinite"}}/>
+              : null
+            }
+            {loading ? "กำลังดำเนินการ…" : mode === "login" ? "เข้าสู่ระบบ" : mode === "register" ? "สมัครสมาชิก" : "ส่งลิงก์รีเซ็ต"}
+            {!loading && <I.Right size={14}/>}
           </button>
 
-          <div className="flex-c gap-3 mt-4" style={{justifyContent: "center"}}>
-            <div style={{flex: 1, height: 1, background: "var(--hair-2)"}}/>
-            <span className="tiny mono muted">หรือ</span>
-            <div style={{flex: 1, height: 1, background: "var(--hair-2)"}}/>
+          {/* Switch mode */}
+          <div className="center small muted mt-4">
+            {mode === "login" ? (
+              <span>ยังไม่มีบัญชี? <button style={{background:"none",border:"none",cursor:"pointer",textDecoration:"underline",color:"var(--muted)",fontSize:"inherit",padding:0}} onClick={() => { setMode("register"); setErr(""); }}>สมัครสมาชิก</button></span>
+            ) : mode === "register" ? (
+              <span>มีบัญชีแล้ว? <button style={{background:"none",border:"none",cursor:"pointer",textDecoration:"underline",color:"var(--muted)",fontSize:"inherit",padding:0}} onClick={() => { setMode("login"); setErr(""); }}>เข้าสู่ระบบ</button></span>
+            ) : (
+              <button style={{background:"none",border:"none",cursor:"pointer",textDecoration:"underline",color:"var(--muted)",fontSize:"inherit",padding:0}} onClick={() => { setMode("login"); setErr(""); setSent(false); }}>← กลับหน้าเข้าสู่ระบบ</button>
+            )}
           </div>
 
-          <button className="btn w-full mt-4" style={{justifyContent: "center"}}>
-            <I.Wifi size={14}/> เข้าสู่ระบบด้วย SSO (Kaimuk Co., Ltd.)
-          </button>
-
-          <div className="center muted tiny mt-6">
-            ใช้งาน SmartFarm บน iPhone, Android, แท็บเล็ต และ Smart TV<br/>
-            © 2026 Kaimuk Smart Agriculture Co., Ltd.
+          {/* Demo mode */}
+          <div style={{marginTop:20,paddingTop:16,borderTop:"1px solid var(--hair-2)"}}>
+            <button className="btn w-full" style={{justifyContent:"center",background:"var(--cream)",border:"1px dashed var(--hair)",fontFamily:"var(--f-sans)"}} onClick={handleDemo}>
+              🌿 ทดลองใช้งาน Demo (ไม่ต้อง Login)
+            </button>
           </div>
+
+          {/* Supabase config accordion */}
+          <details style={{marginTop:14}}>
+            <summary style={{cursor:"pointer",fontSize:11,fontFamily:"var(--f-mono)",color:"var(--muted)",userSelect:"none",listStyle:"none",display:"flex",alignItems:"center",gap:6,padding:"8px 0"}}>
+              <I.Gear size={11}/> ตั้งค่าเชื่อมต่อ Supabase
+            </summary>
+            <div style={{marginTop:10,padding:"14px",background:"var(--cream)",borderRadius:8,display:"flex",flexDirection:"column",gap:10}}>
+              <div style={{fontSize:11,color:"var(--muted)",fontFamily:"var(--f-mono)",marginBottom:4}}>
+                Project URL และ anon key จาก Supabase Dashboard → Settings → API
+              </div>
+              <div className="field" style={{margin:0}}>
+                <label style={{fontSize:10}}>Supabase URL</label>
+                <input id="sb-url" placeholder="https://xxxxxxxxxxxx.supabase.co" style={{fontSize:11,fontFamily:"var(--f-mono)"}} defaultValue={localStorage.getItem("sf_sb_url") || ""}/>
+              </div>
+              <div className="field" style={{margin:0}}>
+                <label style={{fontSize:10}}>Anon / Public Key</label>
+                <input id="sb-key" type="password" placeholder="eyJhbGci..." style={{fontSize:11,fontFamily:"var(--f-mono)"}} defaultValue={localStorage.getItem("sf_sb_key") || ""}/>
+              </div>
+              <button className="btn primary" style={{fontSize:12}} onClick={saveSupabase}><I.Plug size={12}/> บันทึกและเชื่อมต่อ</button>
+              {window._supabase && (
+                <div style={{fontSize:11,color:"var(--sage-2)",fontFamily:"var(--f-mono)"}}>✓ เชื่อมต่อแล้ว</div>
+              )}
+            </div>
+          </details>
+
+          <div className="center muted tiny mt-5">© 2026 Kaimuk Smart Agriculture Co., Ltd.</div>
+          <style>{`@keyframes lspin { to { transform: rotate(360deg); } }`}</style>
         </div>
       </div>
     </div>
@@ -1229,7 +1419,7 @@ function DashboardPage() {
       <div className="page-head">
         <div>
           <div className="muted small uc">โซนรวมทั้งหมด · 11 พ.ค. 2026</div>
-          <h1>สวัสดีตอนเช้า, ไชยวัฒน์</h1>
+          <h1>สวัสดี, ยินดีต้อนรับ</h1>
           <div className="meta mt-2">ฟาร์มทำงานปกติ · 248 sensors online · 6 devices · 2 warnings</div>
         </div>
         <div className="spacer"/>
@@ -2470,7 +2660,7 @@ Object.assign(window, { LoginPage, DashboardPage, SensorsPage, DevicesPage,
   DeviceScheduleModal, DeviceConfigModal, ScheduleModal, AddAutomationModal });
 
 </script>
-<script type="text/babel" data-presets="react">
+<script type="text/babel" data-presets="env-react">
 /* SmartFarm — Map + AI Analysis */
 
 // ============ MAP ============
@@ -3544,7 +3734,7 @@ function AIPage() {
 Object.assign(window, { MapPage, AIPage });
 
 </script>
-<script type="text/babel" data-presets="react">
+<script type="text/babel" data-presets="env-react">
 /* SmartFarm — Reports + Users + Settings */
 
 // ============ REPORTS ============
@@ -3888,19 +4078,21 @@ function ProfileTab() {
     <div className="card">
       <div className="card-h"><div className="card-title">โปรไฟล์ของฉัน</div></div>
       <div className="flex-c gap-4 mb-4">
-        <div className="avatar-img" style={{width: 72, height: 72, fontSize: 28}}>ช</div>
+        <div className="avatar-img" style={{width:72,height:72,fontSize:28,background:"var(--sage)",color:"white",display:"grid",placeItems:"center"}}>
+          {window._supabase ? "?" : "D"}
+        </div>
         <div>
-          <div className="serif" style={{fontSize: 20}}>ไชยวัฒน์ บุญเรือง</div>
-          <div className="small muted">Owner · Kaimuk Smart Farm</div>
+          <div className="serif" style={{fontSize:20}}>ดูข้อมูลจาก Supabase Auth</div>
+          <div className="small muted">ชื่อและอีเมลดึงมาจาก Google / Email ที่ใช้ Login</div>
           <button className="btn mt-3"><I.Camera size={12}/> เปลี่ยนรูปโปรไฟล์</button>
         </div>
       </div>
       <div className="hr"/>
-      <div className="grid g-2" style={{gap: 18}}>
-        <div className="field"><label>ชื่อ-นามสกุล</label><input defaultValue="ไชยวัฒน์ บุญเรือง"/></div>
-        <div className="field"><label>อีเมล</label><input defaultValue="chai@kaimuk.farm"/></div>
-        <div className="field"><label>เบอร์โทร</label><input defaultValue="081-234-5678"/></div>
-        <div className="field"><label>LINE ID</label><input defaultValue="@chaikaimuk"/></div>
+      <div className="grid g-2" style={{gap:18}}>
+        <div className="field"><label>ชื่อ-นามสกุล</label><input placeholder="ดึงจาก Supabase Auth" readOnly style={{color:"var(--muted)"}}/></div>
+        <div className="field"><label>อีเมล</label><input placeholder="ดึงจาก Supabase Auth" readOnly style={{color:"var(--muted)"}}/></div>
+        <div className="field"><label>เบอร์โทร</label><input defaultValue=""/></div>
+        <div className="field"><label>LINE ID</label><input defaultValue=""/></div>
         <div className="field"><label>ภาษา</label><input defaultValue="ภาษาไทย"/></div>
         <div className="field"><label>เขตเวลา</label><input defaultValue="GMT+7 — Bangkok"/></div>
       </div>
@@ -4327,7 +4519,7 @@ function UserDetailModal({ user }) {
 }
 
 </script>
-<script type="text/babel" data-presets="react">
+<script type="text/babel" data-presets="env-react">
 /* SmartFarm — App shell with sidebar navigation */
 
 const NAV = [
@@ -4368,107 +4560,278 @@ const PAGE_META = {
   settings:   {title: "Settings", crumb: ["ระบบ", "Settings"]},
 };
 
-function Sidebar({ page, setPage, onLogout }) {
+function Sidebar({ page, setPage, onLogout, user }) {
+  const meta = user || {};
+  const um   = meta.user_metadata || {};
+  const displayName = meta._demo ? "Demo User" : (um.full_name || um.name || (meta.email || "").split("@")[0] || "ผู้ใช้");
+  const role        = meta._role || (meta._demo ? "Viewer" : "—");
+  const initial     = (displayName[0] || "?").toUpperCase();
+  const avatarUrl   = um.avatar_url || um.picture || null;
+
   return (
     <aside className="sidebar">
-      <div className="brand">
-        <div className="brand-mark"><I.Leaf size={16} stroke="white"/></div>
-        <div>
-          <div className="brand-name">SmartFarm</div>
-          <div className="brand-sub">Kaimuk · v2.4</div>
+      <div className="sidebar-header">
+        <div className="brand">
+          <div className="brand-mark"><I.Leaf size={16} stroke="white"/></div>
+          <div>
+            <div className="brand-name">SmartFarm</div>
+            <div className="brand-sub">Kaimuk · v2.4</div>
+          </div>
         </div>
       </div>
 
-      {NAV.map(g => (
-        <div key={g.group}>
-          <div className="nav-group-label">{g.group}</div>
-          {g.items.map(it => {
-            const Ico = I[it.icon];
-            return (
-              <div key={it.id} className={cx("nav-item", page === it.id && "active")} onClick={() => setPage(it.id)}>
-                <Ico size={16} className="nav-icon"/>
-                <span className="nav-label">{it.l}</span>
-                {it.badge && <span className="nav-badge">{it.badge}</span>}
-              </div>
-            );
-          })}
-        </div>
-      ))}
+      <div className="sidebar-menu">
+        {NAV.map(g => (
+          <div key={g.group}>
+            <div className="nav-group-label">{g.group}</div>
+            {g.items.map(it => {
+              const Ico = I[it.icon];
+              return (
+                <div key={it.id} className={cx("nav-item", page === it.id && "active")} onClick={() => setPage(it.id)}>
+                  <Ico size={16} className="nav-icon"/>
+                  <span className="nav-label">{it.l}</span>
+                  {it.badge && <span className="nav-badge">{it.badge}</span>}
+                </div>
+              );
+            })}
+          </div>
+        ))}
 
-      <div style={{flex: 1}}/>
-      <div className="card" style={{padding: 14, background: "var(--cream)", borderColor: "transparent"}}>
-        <div className="tiny mono uc muted">SYSTEM HEALTH</div>
-        <div className="flex-c gap-2 mt-2">
-          <span style={{width: 8, height: 8, borderRadius: 999, background: "var(--sage)"}}/>
-          <div className="small">ทำงานปกติ</div>
+        <div className="card" style={{padding:14,background:"var(--cream)",borderColor:"transparent",marginTop:10}}>
+          <div className="tiny mono uc muted">SYSTEM HEALTH</div>
+          <div className="flex-c gap-2 mt-2">
+            <span style={{width:8,height:8,borderRadius:999,background:"var(--sage)"}}/>
+            <div className="small">ทำงานปกติ</div>
+          </div>
+          <div className="bar mt-3"><span style={{width:"98%"}}/></div>
+          <div className="tiny mono muted mt-2">Uptime 99.8% · 30 วัน</div>
         </div>
-        <div className="bar mt-3"><span style={{width: "98%"}}/></div>
-        <div className="tiny mono muted mt-2">Uptime 99.8% · 30 วัน</div>
       </div>
 
-      <div className="nav-item" onClick={onLogout} style={{marginTop: 8}}>
-        <I.Logout size={16} className="nav-icon"/>
-        <span className="nav-label">ออกจากระบบ</span>
+      <div className="sidebar-footer">
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"12px 8px 10px",borderBottom:"1px solid var(--hair-2)",marginBottom:6}}>
+          <div style={{width:32,height:32,borderRadius:8,flexShrink:0,background:"var(--sage)",display:"grid",placeItems:"center",color:"white",fontSize:13,fontFamily:"var(--f-serif)",overflow:"hidden"}}>
+            {avatarUrl
+              ? <img src={avatarUrl} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e => { e.target.style.display = "none"; }}/>
+              : initial
+            }
+          </div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:12,fontWeight:500,color:"var(--ink-2)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{displayName}</div>
+            <div style={{fontSize:10,fontFamily:"var(--f-mono)",color:"var(--muted)",marginTop:1}}>{role}{meta._demo ? " · Demo" : ""}</div>
+          </div>
+        </div>
+        <div className="nav-item" onClick={onLogout}>
+          <I.Logout size={16} className="nav-icon"/>
+          <span className="nav-label">ออกจากระบบ</span>
+        </div>
       </div>
     </aside>
   );
 }
 
-function Topbar({ page }) {
-  const m = PAGE_META[page];
+function Topbar({ page, user, onLogout }) {
+  const m   = PAGE_META[page];
+  const [showProfile, setShowProfile] = React.useState(false);
+  const meta = user || {};
+  const um   = meta.user_metadata || {};
+  const displayName = meta._demo ? "Demo User" : (um.full_name || um.name || (meta.email || "").split("@")[0] || "ผู้ใช้");
+  const shortName   = displayName.length > 12 ? displayName.slice(0, 12) + "…" : displayName;
+  const role        = meta._role || (meta._demo ? "Viewer" : "—");
+  const email       = meta._demo ? "demo@smartfarm.local" : (meta.email || "—");
+  const initial     = (displayName[0] || "?").toUpperCase();
+  const avatarUrl   = um.avatar_url || um.picture || null;
+
+  const AvatarEl = ({ size }) => (
+    <div style={{width:size,height:size,borderRadius:size < 40 ? 8 : 12,background:"var(--sage)",display:"grid",placeItems:"center",color:"white",fontSize:size < 40 ? 13 : 20,fontFamily:"var(--f-serif)",overflow:"hidden",flexShrink:0}}>
+      {avatarUrl
+        ? <img src={avatarUrl} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e => { e.target.style.display = "none"; }}/>
+        : initial
+      }
+    </div>
+  );
+
   return (
     <div className="topbar">
       <div className="crumb">
-        <span>Kaimuk Farm</span>
-        <span className="sep">/</span>
-        <span>{m.crumb[0]}</span>
-        <span className="sep">/</span>
+        <span>Kaimuk Farm</span><span className="sep">/</span>
+        <span>{m.crumb[0]}</span><span className="sep">/</span>
         <span className="cur">{m.crumb[1]}</span>
       </div>
       <div className="topbar-spacer"/>
-      <div className="search">
-        <I.Search size={14}/>
-        <input placeholder="ค้นหา (⌘K) — เซ็นเซอร์ อุปกรณ์ รายงาน..."/>
-      </div>
+      <div className="search"><I.Search size={14}/><input placeholder="ค้นหา (⌘K)..."/></div>
       <button className="icon-btn" onClick={() => pushModal(<AlertsModal/>)}><I.Bell size={16}/><span className="dot"/></button>
       <button className="icon-btn" onClick={() => pushToast("เปิดปฏิทินแล้ว","success")}><I.Calendar size={16}/></button>
-      <div className="avatar">
-        <div className="avatar-img">ช</div>
-        <div>
-          <div className="avatar-name">ไชยวัฒน์ บ.</div>
-          <div className="avatar-role">Owner</div>
+
+      <div style={{position:"relative"}}>
+        <div className="avatar" style={{cursor:"pointer"}} onClick={() => setShowProfile(v => !v)}>
+          <AvatarEl size={32}/>
+          <div>
+            <div className="avatar-name">{shortName}</div>
+            <div className="avatar-role">{role}</div>
+          </div>
+          <I.Down size={12}/>
         </div>
-        <I.Down size={12}/>
+
+        {showProfile && (
+          <div style={{position:"absolute",top:"calc(100% + 8px)",right:0,width:260,background:"var(--paper)",border:"1px solid var(--hair)",borderRadius:12,boxShadow:"0 8px 32px rgba(0,0,0,0.12)",zIndex:500,overflow:"hidden"}}>
+            <div style={{padding:"16px",borderBottom:"1px solid var(--hair-2)",display:"flex",alignItems:"center",gap:12}}>
+              <AvatarEl size={44}/>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontFamily:"var(--f-serif)",fontSize:15,marginBottom:2}}>{displayName}</div>
+                <div style={{fontFamily:"var(--f-mono)",fontSize:10,color:"var(--muted)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{email}</div>
+              </div>
+            </div>
+            <div style={{padding:"10px 16px",borderBottom:"1px solid var(--hair-2)",display:"flex",alignItems:"center",gap:8}}>
+              <span style={{fontFamily:"var(--f-mono)",fontSize:10,color:"var(--muted)"}}>ROLE</span>
+              <Chip tone={role === "Owner" || role === "Admin" ? "sage" : ""}>{role}</Chip>
+              {meta._demo && <Chip tone="warn">Demo</Chip>}
+            </div>
+            <div style={{padding:8}}>
+              <div className="nav-item" onClick={() => { setShowProfile(false); pushModal(<EditProfileModal user={user}/>); }}>
+                <I.Edit size={14}/><span style={{fontSize:13}}>แก้ไขโปรไฟล์</span>
+              </div>
+              <div className="nav-item" style={{color:"var(--danger)"}} onClick={() => { setShowProfile(false); onLogout(); }}>
+                <I.Logout size={14}/><span style={{fontSize:13}}>ออกจากระบบ</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {showProfile && <div style={{position:"fixed",inset:0,zIndex:499}} onClick={() => setShowProfile(false)}/>}
     </div>
   );
 }
 
-function App() {
-  const [authed, setAuthed] = React.useState(false);
-  const [page, setPage] = React.useState("dashboard");
+function EditProfileModal({ user }) {
+  const meta = user || {};
+  const um   = meta.user_metadata || {};
+  const initName = meta._demo ? "Demo User" : (um.full_name || um.name || "");
+  const [name, setName] = React.useState(initName);
 
-  if (!authed) return <LoginPage onLogin={() => setAuthed(true)}/>;
+  function doSave() {
+    const sb = window._supabase;
+    if (sb && !meta._demo && meta.id) {
+      sb.auth.updateUser({ data: { full_name: name } });
+      sb.from("profiles").update({ full_name: name, updated_at: new Date().toISOString() }).eq("id", meta.id);
+    }
+    popModal();
+    pushToast(meta._demo ? "Demo mode — ไม่ได้บันทึกจริง" : "บันทึกโปรไฟล์แล้ว", meta._demo ? "warn" : "success");
+  }
+
+  return (
+    <Modal title="แก้ไขโปรไฟล์" sub={meta._demo ? "demo@smartfarm.local" : (meta.email || "—")}
+      footer={<><button className="btn" onClick={popModal}>ยกเลิก</button><button className="btn primary" onClick={doSave}>บันทึก</button></>}
+    >
+      <div className="field">
+        <label>ชื่อ-นามสกุล</label>
+        <input value={name} onChange={e => setName(e.target.value)}/>
+      </div>
+      <div className="field">
+        <label>อีเมล (แก้ไขไม่ได้)</label>
+        <input value={meta._demo ? "demo@smartfarm.local" : (meta.email || "—")} readOnly style={{color:"var(--muted)",background:"var(--cream)"}}/>
+      </div>
+      {meta._demo && (
+        <div style={{background:"var(--warn-soft)",padding:"10px 12px",borderRadius:8,fontSize:12,color:"var(--warn)"}}>
+          ⚠️ Demo mode — การเปลี่ยนแปลงจะไม่ถูกบันทึกถาวร
+        </div>
+      )}
+    </Modal>
+  );
+}
+
+function App() {
+  const [user,    setUser]    = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [page,    setPage]    = React.useState("dashboard");
+
+  React.useEffect(() => {
+    // Init Supabase from localStorage if not already done
+    const url = localStorage.getItem("sf_sb_url");
+    const key = localStorage.getItem("sf_sb_key");
+    if (url && key && window.supabase && !window._supabase) {
+      try { window._supabase = window.supabase.createClient(url, key); }
+      catch(e) { console.warn("Supabase init error:", e); }
+    }
+
+    const sb = window._supabase;
+    if (!sb) { setLoading(false); return; }
+
+    // Check existing session
+    sb.auth.getSession().then(result => {
+      const session = result.data && result.data.session;
+      if (session && session.user) {
+        upsertProfile(sb, session.user);
+        fetchRole(sb, session.user).then(role => {
+          setUser({ ...session.user, _role: role });
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
+      }
+    }).catch(() => { setLoading(false); });
+
+    // Listen for auth state changes (handles OAuth redirect)
+    let sub = null;
+    try {
+      const result = sb.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_IN" && session && session.user) {
+          upsertProfile(sb, session.user);
+          fetchRole(sb, session.user).then(role => {
+            setUser({ ...session.user, _role: role });
+            setLoading(false);
+          });
+        } else if (event === "SIGNED_OUT") {
+          setUser(null);
+        }
+      });
+      sub = result.data && result.data.subscription;
+    } catch(e) { console.warn("onAuthStateChange:", e); }
+
+    return () => { if (sub) try { sub.unsubscribe(); } catch(e) {} };
+  }, []);
+
+  function handleLogout() {
+    const sb = window._supabase;
+    if (sb && user && !user._demo) {
+      sb.auth.signOut().catch(() => {});
+    }
+    setUser(null);
+    setPage("dashboard");
+  }
+
+  if (loading) return (
+    <div style={{height:"100vh",display:"grid",placeItems:"center",background:"var(--cream)"}}>
+      <div style={{textAlign:"center"}}>
+        <div style={{width:40,height:40,border:"3px solid var(--sage-2)",borderTopColor:"transparent",borderRadius:"50%",animation:"lspin 0.8s linear infinite",margin:"0 auto 16px"}}/>
+        <div className="muted small">กำลังตรวจสอบ session…</div>
+      </div>
+      <style>{`@keyframes lspin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  );
+
+  if (!user) return <LoginPage onLogin={u => { setUser(u); setPage("dashboard"); }}/>;
 
   const Page = {
-    dashboard: DashboardPage,
-    sensors: SensorsPage,
-    devices: DevicesPage,
-    map: MapPage,
-    farm3d: Farm3DPage,
-    ai: AIPage,
-    reports: ReportsPage,
-    access: AccessControlPage,
+    dashboard:   DashboardPage,
+    sensors:     SensorsPage,
+    devices:     DevicesPage,
+    map:         MapPage,
+    farm3d:      Farm3DPage,
+    ai:          AIPage,
+    reports:     ReportsPage,
+    access:      AccessControlPage,
     connections: ConnectionsPage,
-    users: UsersPage,
-    settings: SettingsPage,
-  }[page];
+    users:       UsersPage,
+    settings:    SettingsPage,
+  }[page] || DashboardPage;
 
   return (
     <div className="app">
-      <Sidebar page={page} setPage={setPage} onLogout={() => setAuthed(false)}/>
+      <Sidebar page={page} setPage={setPage} onLogout={handleLogout} user={user}/>
       <div data-screen-label={PAGE_META[page].title}>
-        <Topbar page={page}/>
+        <Topbar page={page} user={user} onLogout={handleLogout}/>
         <main className="main">
           <Page/>
         </main>
@@ -4477,6 +4840,26 @@ function App() {
       <ToastRoot/>
     </div>
   );
+}
+
+// ── Supabase helpers (no async/await) ─────────────────────────
+function upsertProfile(sb, user) {
+  if (!sb || !user || !user.id) return;
+  const meta = user.user_metadata || {};
+  sb.from("profiles").upsert({
+    id:         user.id,
+    email:      user.email || "",
+    full_name:  meta.full_name || meta.name || (user.email || "").split("@")[0] || "",
+    avatar_url: meta.avatar_url || meta.picture || null,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: "id" }).catch(e => console.warn("upsertProfile:", e.message));
+}
+
+function fetchRole(sb, user) {
+  if (!sb || !user || !user.id) return Promise.resolve("Viewer");
+  return sb.from("profiles").select("role").eq("id", user.id).single()
+    .then(res => (res.data && res.data.role) || "Viewer")
+    .catch(() => "Viewer");
 }
 
 function AlertsModal() {
