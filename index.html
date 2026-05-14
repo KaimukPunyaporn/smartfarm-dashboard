@@ -5015,24 +5015,7 @@ function App() {
     const url = localStorage.getItem("sf_sb_url");
     const key = localStorage.getItem("sf_sb_key");
     if (url && key && window.supabase && !window._supabase) {
-      try { 
-  window._supabase = window.supabase.createClient(url, key);
-
-  window._supabase.auth.getSession().then(({ data }) => {
-    if (data.session) {
-      console.log("Login success");
-
-      localStorage.setItem("logged_in", "true");
-
-      document.getElementById("loginPage")?.style && (document.getElementById("loginPage").style.display = "none");
-      document.getElementById("dashboardPage")?.style && (document.getElementById("dashboardPage").style.display = "block");
-    }
-  });
-
-}
-catch(e) { 
-  console.warn("Supabase init error:", e); 
-}
+      try { window._supabase = window.supabase.createClient(url, key); }
       catch(e) { console.warn("Supabase init error:", e); }
     }
 
