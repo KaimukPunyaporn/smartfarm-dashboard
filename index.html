@@ -4682,42 +4682,72 @@ function UserDetailModal({ user }) {
 
 const NAV = [
   {group: "ภาพรวม", items: [
-    {id: "dashboard", l: "Dashboard", en: "Dashboard", icon: "Home"},
+    {id: "dashboard",  l: "Dashboard",        en: "Dashboard",  icon: "Home"},
+    {id: "command",    l: "AI Command Center", en: "Command",    icon: "AI",  badge: "3"},
+    {id: "executive",  l: "Executive Dashboard",en:"Executive",  icon: "Bar"},
   ]},
   {group: "การติดตาม", items: [
-    {id: "sensors", l: "Sensor Monitoring", en: "Sensors", icon: "Sensor", badge: "248"},
-    {id: "devices", l: "Device Control", en: "Devices", icon: "Device", badge: "6"},
-    {id: "map", l: "Map View", en: "Map", icon: "Map"},
-    {id: "farm3d", l: "3D Farm View", en: "3D View", icon: "Cube"},
+    {id: "sensors",    l: "Sensor Monitoring", en: "Sensors",    icon: "Sensor", badge: "248"},
+    {id: "devices",    l: "Device Control",    en: "Devices",    icon: "Device", badge: "6"},
+    {id: "map",        l: "Map View",          en: "Map",        icon: "Map"},
+    {id: "farm3d",     l: "3D Farm View",      en: "3D View",    icon: "Cube"},
+    {id: "twin",       l: "Digital Twin",      en: "Twin",       icon: "Grid"},
   ]},
   {group: "ปัญญาประดิษฐ์", items: [
-    {id: "ai", l: "AI Analysis", en: "AI", icon: "AI", badge: "5"},
-    {id: "reports", l: "Reports", en: "Reports", icon: "Report"},
+    {id: "ai",         l: "AI Analysis",       en: "AI",         icon: "AI",  badge: "5"},
+    {id: "vision",     l: "AI Vision Analytics",en:"Vision",     icon: "Camera"},
+    {id: "predictive", l: "Predictive AI",     en: "Predictive", icon: "Line"},
+    {id: "assistant",  l: "AI Farm Assistant", en: "Assistant",  icon: "Bell"},
+    {id: "drone",      l: "Drone Intelligence",en: "Drone",      icon: "Up"},
+    {id: "reports",    l: "Reports",           en: "Reports",    icon: "Report"},
+  ]},
+  {group: "การจัดการฟาร์ม", items: [
+    {id: "automation", l: "Automation Rules",  en: "Automation", icon: "Gear"},
+    {id: "water",      l: "Water Management",  en: "Water",      icon: "Wave"},
+    {id: "energy",     l: "Energy Management", en: "Energy",     icon: "Sun"},
+    {id: "production", l: "Production Mgmt",   en: "Production", icon: "Leaf"},
+    {id: "inventory",  l: "Inventory",         en: "Inventory",  icon: "Beaker"},
+    {id: "maintenance",l: "Maintenance",       en: "Maintenance",icon: "Pump"},
   ]},
   {group: "ความปลอดภัย", items: [
-    {id: "cctv",   l: "กล้อง CCTV", en: "CCTV", icon: "Video", badge: "3"},
-    {id: "access", l: "Access Control", en: "Access", icon: "Lock", badge: "3"},
-    {id: "connections", l: "Connections", en: "Connect", icon: "Plug"},
+    {id: "cctv",        l: "กล้อง CCTV",       en: "CCTV",       icon: "Video", badge: "3"},
+    {id: "access",      l: "Access Control",   en: "Access",     icon: "Lock", badge: "3"},
+    {id: "connections", l: "Connections",      en: "Connect",    icon: "Plug"},
+    {id: "notifications",l:"Notifications",    en: "Alerts",     icon: "Bell", badge: "7"},
   ]},
   {group: "ระบบ", items: [
-    {id: "users", l: "User Management", en: "Users", icon: "Users"},
-    {id: "settings", l: "Settings", en: "Settings", icon: "Gear"},
+    {id: "users",    l: "User Management", en: "Users",    icon: "Users"},
+    {id: "settings", l: "Settings",        en: "Settings", icon: "Gear"},
   ]},
 ];
 
 const PAGE_META = {
-  dashboard:  {title: "Dashboard", crumb: ["ภาพรวม", "Dashboard"]},
-  sensors:    {title: "Sensor Monitoring", crumb: ["การติดตาม", "Sensors"]},
-  devices:    {title: "Device Control", crumb: ["การติดตาม", "Devices"]},
-  map:        {title: "Map View", crumb: ["การติดตาม", "Map"]},
-  farm3d:     {title: "3D Farm View", crumb: ["การติดตาม", "3D Farm"]},
-  ai:         {title: "AI Analysis", crumb: ["ปัญญาประดิษฐ์", "AI Analysis"]},
-  reports:    {title: "Reports", crumb: ["ปัญญาประดิษฐ์", "Reports"]},
-  cctv:       {title: "กล้อง CCTV", crumb: ["ความปลอดภัย", "CCTV"]},
-  access:      {title: "Access Control", crumb: ["ความปลอดภัย", "Access Control"]},
-  connections: {title: "Connections", crumb: ["ความปลอดภัย", "Connections"]},
-  users:      {title: "User Management", crumb: ["ระบบ", "Users"]},
-  settings:   {title: "Settings", crumb: ["ระบบ", "Settings"]},
+  dashboard:    {title: "Dashboard",          crumb: ["ภาพรวม",           "Dashboard"]},
+  command:      {title: "AI Command Center",  crumb: ["ภาพรวม",           "AI Command Center"]},
+  executive:    {title: "Executive Dashboard",crumb: ["ภาพรวม",           "Executive"]},
+  sensors:      {title: "Sensor Monitoring",  crumb: ["การติดตาม",        "Sensors"]},
+  devices:      {title: "Device Control",     crumb: ["การติดตาม",        "Devices"]},
+  map:          {title: "Map View",           crumb: ["การติดตาม",        "Map"]},
+  farm3d:       {title: "3D Farm View",       crumb: ["การติดตาม",        "3D Farm"]},
+  twin:         {title: "Digital Twin",       crumb: ["การติดตาม",        "Digital Twin"]},
+  ai:           {title: "AI Analysis",        crumb: ["ปัญญาประดิษฐ์",   "AI Analysis"]},
+  vision:       {title: "AI Vision Analytics",crumb: ["ปัญญาประดิษฐ์",   "Vision"]},
+  predictive:   {title: "Predictive AI",      crumb: ["ปัญญาประดิษฐ์",   "Predictive"]},
+  assistant:    {title: "AI Farm Assistant",  crumb: ["ปัญญาประดิษฐ์",   "Assistant"]},
+  drone:        {title: "Drone Intelligence", crumb: ["ปัญญาประดิษฐ์",   "Drone"]},
+  reports:      {title: "Reports",            crumb: ["ปัญญาประดิษฐ์",   "Reports"]},
+  automation:   {title: "Automation Rules",   crumb: ["การจัดการ",        "Automation"]},
+  water:        {title: "Water Management",   crumb: ["การจัดการ",        "Water"]},
+  energy:       {title: "Energy Management",  crumb: ["การจัดการ",        "Energy"]},
+  production:   {title: "Production Mgmt",    crumb: ["การจัดการ",        "Production"]},
+  inventory:    {title: "Inventory",          crumb: ["การจัดการ",        "Inventory"]},
+  maintenance:  {title: "Maintenance",        crumb: ["การจัดการ",        "Maintenance"]},
+  cctv:         {title: "กล้อง CCTV",         crumb: ["ความปลอดภัย",     "CCTV"]},
+  access:       {title: "Access Control",     crumb: ["ความปลอดภัย",     "Access Control"]},
+  connections:  {title: "Connections",        crumb: ["ความปลอดภัย",     "Connections"]},
+  notifications:{title: "Notifications",      crumb: ["ความปลอดภัย",     "Notifications"]},
+  users:        {title: "User Management",    crumb: ["ระบบ",             "Users"]},
+  settings:     {title: "Settings",           crumb: ["ระบบ",             "Settings"]},
 };
 
 function Sidebar({ page, setPage, onLogout, user }) {
@@ -5054,18 +5084,32 @@ function App() {
   if (!user) return <LoginPage onLogin={u => { setUser(u); setPage("dashboard"); }}/>;
 
   const Page = {
-    dashboard:   DashboardPage,
-    sensors:     SensorsPage,
-    devices:     DevicesPage,
-    map:         MapPage,
-    farm3d:      Farm3DPage,
-    ai:          AIPage,
-    reports:     ReportsPage,
-    cctv:        CCTVPage,
-    access:      AccessControlPage,
-    connections: ConnectionsPage,
-    users:       UsersPage,
-    settings:    SettingsPage,
+    dashboard:     DashboardPage,
+    command:       CommandCenterPage,
+    executive:     ExecutiveDashboardPage,
+    sensors:       SensorsPage,
+    devices:       DevicesPage,
+    map:           MapPage,
+    farm3d:        Farm3DPage,
+    twin:          DigitalTwinPage,
+    ai:            AIPage,
+    vision:        VisionAnalyticsPage,
+    predictive:    PredictiveAIPage,
+    assistant:     AIAssistantPage,
+    drone:         DroneIntelligencePage,
+    reports:       ReportsPage,
+    automation:    AutomationPage,
+    water:         WaterManagementPage,
+    energy:        EnergyManagementPage,
+    production:    ProductionPage,
+    inventory:     InventoryPage,
+    maintenance:   MaintenancePage,
+    cctv:          CCTVPage,
+    access:        AccessControlPage,
+    connections:   ConnectionsPage,
+    notifications: NotificationsPage,
+    users:         UsersPage,
+    settings:      SettingsPage,
   }[page] || DashboardPage;
 
   return (
@@ -7230,6 +7274,1143 @@ function AddCCTVModal({ onAdd }) {
     </Modal>
   );
 }
+
+
+// ═══════════════════════════════════════════════════════════════
+// NEW ENTERPRISE PAGES
+// ═══════════════════════════════════════════════════════════════
+
+const DRONE_MISSIONS = [
+  {id:"DRN-2026-0514-01",name:"สำรวจโซน A+B",status:"completed",pilot:"อัตโนมัติ",area:"2.0 ไร่",alt:50,duration:"18 นาที",battery:92,ndvi:0.74,date:"14 พ.ค. 09:20",findings:2},
+  {id:"DRN-2026-0513-02",name:"ตรวจสอบโรคพืช C",status:"completed",pilot:"ธีรพงษ์",area:"1.0 ไร่",alt:35,duration:"12 นาที",battery:87,ndvi:0.61,date:"13 พ.ค. 14:05",findings:4},
+  {id:"DRN-2026-0512-01",name:"Thermal Scan ทั้งฟาร์ม",status:"completed",pilot:"อัตโนมัติ",area:"3.5 ไร่",alt:80,duration:"24 นาที",battery:78,ndvi:0.69,date:"12 พ.ค. 07:00",findings:1},
+  {id:"DRN-2026-0515-01",name:"ฉีดพ่นสารอาหาร D",status:"scheduled",pilot:"สมชาย",area:"0.5 ไร่",alt:20,duration:"—",battery:100,ndvi:null,date:"15 พ.ค. 06:00",findings:0},
+];
+const WATER_TANKS = [
+  {id:"TK-01",name:"ถังน้ำหลัก A",cap:10000,cur:6480,zone:"A",status:"normal"},
+  {id:"TK-02",name:"ถังโรงเรือน B",cap:5000,cur:3200,zone:"B",status:"normal"},
+  {id:"TK-03",name:"ถังมะเขือเทศ C",cap:8000,cur:1200,zone:"C",status:"low"},
+  {id:"TK-04",name:"ถัง Hydro D",cap:3000,cur:2700,zone:"D",status:"normal"},
+];
+const ENERGY_DATA = [
+  {device:"ปั๊มน้ำ PMP-01",kwh:4.2,pct:22},{device:"พัดลม FAN-01",kwh:1.8,pct:9},
+  {device:"พัดลม FAN-02",kwh:0.9,pct:5},{device:"ไฟ Grow LGT-02",kwh:3.6,pct:19},
+  {device:"ระบบ Fertigation",kwh:2.1,pct:11},{device:"เซ็นเซอร์ & Gateway",kwh:0.8,pct:4},
+  {device:"อื่นๆ",kwh:5.6,pct:30},
+];
+const CROPS = [
+  {id:"CROP-2026-01",name:"ผักสลัดรอบที่ 3",zone:"A",planted:"12 เม.ย.",harvest:"17 พ.ค.",stage:"เก็บเกี่ยว",stageN:5,yield_est:380,cost:4200,quality:"A"},
+  {id:"CROP-2026-02",name:"เมล่อนโรงเรือน",zone:"B",planted:"20 มี.ค.",harvest:"25 มิ.ย.",stage:"ผลโต",stageN:4,yield_est:920,cost:18400,quality:"—"},
+  {id:"CROP-2026-03",name:"มะเขือเทศเชอรี่",zone:"C",planted:"1 เม.ย.",harvest:"10 มิ.ย.",stage:"ดอกบาน",stageN:3,yield_est:640,cost:9600,quality:"—"},
+  {id:"CROP-2026-04",name:"ผักสลัดไฮโดร",zone:"D",planted:"22 เม.ย.",harvest:"30 พ.ค.",stage:"เติบโต",stageN:2,yield_est:210,cost:3100,quality:"—"},
+];
+const INVENTORY = [
+  {id:"INV-001",name:"ปุ๋ยสูตร 15-15-15",cat:"fertilizer",unit:"กก.",stock:480,low:100,price:28,zone:"ทุกโซน"},
+  {id:"INV-002",name:"เมล็ดพันธุ์ผักสลัด",cat:"seed",unit:"ซอง",stock:120,low:20,price:85,zone:"A,D"},
+  {id:"INV-003",name:"สารกำจัดแมลง (ชีวภาพ)",cat:"chemical",unit:"ลิตร",stock:18,low:10,price:340,zone:"B,C"},
+  {id:"INV-004",name:"สายยาง PE 16mm",cat:"equipment",unit:"เมตร",stock:8,low:20,price:14,zone:"A"},
+  {id:"INV-005",name:"ปุ๋ย Calcium Nitrate",cat:"fertilizer",unit:"กก.",stock:240,low:50,price:42,zone:"B,D"},
+  {id:"INV-006",name:"Filter ระบบน้ำ 2นิ้ว",cat:"spare",unit:"ชิ้น",stock:6,low:3,price:280,zone:"ทุกโซน"},
+];
+const MAINTENANCE = [
+  {id:"MNT-001",device:"ปั๊มน้ำ PMP-01",type:"ตรวจสอบตามรอบ",due:"17 พ.ค.",status:"upcoming",tech:"สมชาย",cost:1200,priority:"medium"},
+  {id:"MNT-002",device:"ระบบ Fertigation FRT-01",type:"เปลี่ยนหัวฉีด",due:"14 พ.ค.",status:"overdue",tech:"ธีรพงษ์",cost:800,priority:"high"},
+  {id:"MNT-003",device:"Gateway LoRa-01",type:"อัปเดต Firmware",due:"20 พ.ค.",status:"upcoming",tech:"อรุณี",cost:0,priority:"low"},
+  {id:"MNT-004",device:"กล้อง CAM-C01",type:"ซ่อมแซมสาย",due:"12 พ.ค.",status:"completed",tech:"ธีรพงษ์",cost:450,priority:"high"},
+  {id:"MNT-005",device:"พัดลม FAN-01",type:"ล้างทำความสะอาด",due:"18 พ.ค.",status:"upcoming",tech:"สมชาย",cost:200,priority:"low"},
+];
+const NOTIFICATIONS_DATA = [
+  {id:1,sev:"critical",title:"ระดับน้ำในถัง TK-03 ต่ำวิกฤต",msg:"ถังน้ำโซน C เหลือเพียง 15% แนะนำเติมน้ำทันที",farm:"Kaimuk Farm",zone:"C",device:"TK-03",time:"2 นาที",read:false},
+  {id:2,sev:"danger",title:"Soil Moisture ต่ำกว่าเกณฑ์",msg:"SOL-03 วัดได้ 22% ต่ำกว่าค่า threshold 30%",farm:"Kaimuk Farm",zone:"C",device:"SOL-03",time:"8 นาที",read:false},
+  {id:3,sev:"warning",title:"อุณหภูมิสูงในโรงเรือน B",msg:"TMP-02 = 37.2°C เกินค่า warning 35°C",farm:"Kaimuk Farm",zone:"B",device:"TMP-02",time:"15 นาที",read:false},
+  {id:4,sev:"warning",title:"Sensor PH-02 ออฟไลน์",msg:"ไม่ได้รับข้อมูลจาก PH-02 มา 10 นาที",farm:"Kaimuk Farm",zone:"D",device:"PH-02",time:"18 นาที",read:false},
+  {id:5,sev:"info",title:"Auto-watering ทำงานสำเร็จ โซน A",msg:"เปิดปั๊ม 6 นาที ใช้น้ำ 74L",farm:"Kaimuk Farm",zone:"A",device:"PMP-01",time:"34 นาที",read:true},
+  {id:6,sev:"info",title:"ตรวจพบใบเหลืองจาก AI Vision",msg:"CAM-01 ตรวจพบโรคใบเหลือง 87%",farm:"Kaimuk Farm",zone:"A",device:"CAM-01",time:"1 ชม.",read:true},
+  {id:7,sev:"info",title:"รายงานประจำวันพร้อมแล้ว",msg:"รายงาน 14 พ.ค. 2026 สร้างสำเร็จ",farm:"Kaimuk Farm",zone:"—",device:"ระบบ",time:"2 ชม.",read:true},
+];
+const AUTOMATION_RULES = [
+  {id:"AUTO-001",name:"Smart Irrigation โซน A",on:true,trigger:"Soil Moisture < 30%",condition:"AND เวลา 06:00-20:00",action:"เปิด PMP-01 เป็นเวลา 8 นาที + แจ้งเตือน LINE",zone:"A",runs:14,last:"34 นาทีที่แล้ว",status:"success"},
+  {id:"AUTO-002",name:"Cooling System โรงเรือน B",on:true,trigger:"Temperature > 38°C",condition:"OR Humidity > 90%",action:"เปิด FAN-01 + FAN-02 + พ่นหมอก MIST-01",zone:"B",runs:7,last:"2 ชม.ที่แล้ว",status:"success"},
+  {id:"AUTO-003",name:"Sensor Offline Alert",on:true,trigger:"Sensor ไม่ส่งข้อมูล > 5 นาที",condition:"—",action:"แจ้งเตือน LINE + Telegram + Email",zone:"ทุกโซน",runs:3,last:"18 นาทีที่แล้ว",status:"fail"},
+  {id:"AUTO-004",name:"Grow Light Schedule D",on:true,trigger:"เวลา 18:00",condition:"—",action:"เปิด LGT-01 + LGT-02 จนถึง 22:00",zone:"D",runs:26,last:"เมื่อคืน 18:00",status:"success"},
+  {id:"AUTO-005",name:"Emergency Water Leakage",on:false,trigger:"Flow sensor > 50 L/min แบบผิดปกติ",condition:"AND เวลากลางคืน",action:"ปิดปั๊มทั้งหมด + แจ้ง Emergency",zone:"ทุกโซน",runs:0,last:"ยังไม่เคยทำงาน",status:"idle"},
+  {id:"AUTO-006",name:"Fertilizer EC Adjustment",on:true,trigger:"EC < 1.2 mS/cm",condition:"—",action:"เปิด Fertigation 5 นาที + LOG",zone:"D",runs:9,last:"4 ชม.ที่แล้ว",status:"success"},
+];
+
+function CommandCenterPage() {
+  const [tick, setTick] = React.useState(0);
+  React.useEffect(() => { const t = setInterval(() => setTick(v => v+1), 3000); return () => clearInterval(t); }, []);
+  const temp  = (28.4 + Math.sin(tick*0.4)*0.8).toFixed(1);
+  const hum   = (72   + Math.cos(tick*0.3)*2).toFixed(0);
+  const soil  = (41   + Math.sin(tick*0.5)*1.2).toFixed(1);
+  const water = Math.max(20, (64 - tick*0.05)).toFixed(1);
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">AI Command Center · Live · 14 พ.ค. 2026</div>
+          <h1>AI Command Center</h1>
+          <div className="meta mt-2">Kaimuk Smart Farm · 4 zones · 248 sensors · 6 devices · 3 alerts</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <span className="chip sage" style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="ddot"/><span>System Online</span></span>
+          <button className="btn" onClick={()=>pushToast("รีเฟรชข้อมูลแล้ว","success")}><I.Refresh size={14}/> Refresh</button>
+          <button className="btn primary" onClick={()=>pushToast("Emergency Mode Activated","danger")}><I.Alert size={14}/> Emergency</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[
+          {l:"Total Farms",v:"1",u:"แห่ง",icon:"Map"},
+          {l:"Active Zones",v:"4",u:"โซน",icon:"Leaf"},
+          {l:"Online Devices",v:"5",u:"/ 6",icon:"Plug"},
+          {l:"Active Alerts",v:"3",u:"รายการ",icon:"Alert"},
+        ].map(k => {
+          const Ico = I[k.icon];
+          return (
+            <div className="kpi" key={k.l}>
+              <div className="kpi-row"><div className="kpi-label uc">{k.l}</div><div className="kpi-icon"><Ico size={14}/></div></div>
+              <div className="kpi-value">{k.v}<span className="kpi-unit">{k.u}</span></div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="grid g-4 mb-4">
+        {[
+          {l:"Temperature",v:temp,u:"°C",ok:parseFloat(temp)<35},
+          {l:"Humidity",v:hum,u:"%",ok:parseFloat(hum)<85},
+          {l:"Soil Moisture",v:soil,u:"%",ok:parseFloat(soil)>30},
+          {l:"Water Level",v:water,u:"%",ok:parseFloat(water)>20},
+          {l:"Light Intensity",v:"24.6",u:"klx",ok:true},
+          {l:"Wind Speed",v:"7",u:"km/h",ok:true},
+          {l:"CO₂",v:"612",u:"ppm",ok:true},
+          {l:"Rainfall",v:"0",u:"mm",ok:true},
+        ].map(k => (
+          <div key={k.l} style={{background:"var(--paper-2)",border:`1px solid ${k.ok?"var(--hair-2)":"var(--warn)"}`,borderRadius:10,padding:"14px 16px"}}>
+            <div className="flex-cb mb-2">
+              <div className="tiny mono uc muted">{k.l}</div>
+              <span className={cx("chip",k.ok?"sage":"warn")} style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="ddot"/>{k.ok?"OK":"!"}</span>
+            </div>
+            <div className="flex-c gap-2" style={{alignItems:"baseline"}}>
+              <span style={{fontFamily:"var(--f-mono)",fontSize:24,fontWeight:300}}>{k.v}</span>
+              <span className="muted small">{k.u}</span>
+            </div>
+            <Sparkline data={series(k.l,20,parseFloat(k.v)*0.85,parseFloat(k.v)*1.15||10)} h={28}/>
+          </div>
+        ))}
+      </div>
+      <div className="grid g-2-1 mb-4">
+        <div className="card">
+          <div className="card-h"><div className="card-title">AI Recommendations</div><span className="chip info">AI Engine v3.2</span></div>
+          {[
+            {tone:"danger",icon:"Alert",text:"โซน C — ความชื้นดิน 22% ต่ำวิกฤต แนะนำเปิดระบบชลประทานทันที",conf:96},
+            {tone:"warn",icon:"Temp",text:"โรงเรือน B อุณหภูมิ 37.2°C ใกล้เกณฑ์ แนะนำเปิดพัดลม",conf:89},
+            {tone:"sage",icon:"Leaf",text:"โซน D ค่า EC ลดลงต่ำกว่า 1.2 ควรปรับสารอาหาร Fertigation",conf:82},
+            {tone:"info",icon:"Wave",text:"ถังน้ำ TK-03 เหลือ 15% กำหนดเติมน้ำพรุ่งนี้เช้า 06:00",conf:78},
+          ].map((r,i)=>(
+            <div key={i} style={{display:"flex",gap:12,padding:"12px 0",borderBottom:i<3?"1px solid var(--hair-2)":"none"}}>
+              <div style={{width:36,height:36,borderRadius:10,background:`var(--${r.tone}-soft)`,color:`var(--${r.tone==="sage"?"sage-2":r.tone})`,display:"grid",placeItems:"center",flexShrink:0}}>
+                {React.createElement(I[r.icon]||I.AI,{size:16})}
+              </div>
+              <div style={{flex:1}}>
+                <div className="small ink2">{r.text}</div>
+                <div className="flex-c gap-2 mt-2">
+                  <div className="bar" style={{flex:1}}><span style={{width:`${r.conf}%`,background:`var(--${r.tone==="sage"?"sage":r.tone==="warn"?"warn":r.tone==="info"?"info":"danger"})`}}/></div>
+                  <span className="tiny mono muted">{r.conf}%</span>
+                </div>
+              </div>
+              <button className="btn" style={{fontSize:11,padding:"5px 10px",flexShrink:0}} onClick={()=>pushToast("ดำเนินการแล้ว","success")}>จัดการ</button>
+            </div>
+          ))}
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:16}}>
+          <div className="card">
+            <div className="card-h"><div className="card-title">Farm Health Score</div></div>
+            <div style={{display:"flex",justifyContent:"center",padding:"8px 0"}}><Donut value={82} size={100} color="var(--sage)"/></div>
+            <div className="center small muted mt-2">ฟาร์มทำงานปกติ · ดีเยี่ยม</div>
+          </div>
+          <div className="card">
+            <div className="card-h"><div className="card-title">Zone Risk Level</div></div>
+            {[{z:"A",risk:"ต่ำ",tone:"sage",score:92},{z:"B",risk:"ปานกลาง",tone:"warn",score:68},{z:"C",risk:"สูง",tone:"danger",score:38},{z:"D",risk:"ต่ำ",tone:"sage",score:88}].map((z,i)=>(
+              <div key={z.z} className="flex-cb" style={{padding:"10px 0",borderBottom:i<3?"1px solid var(--hair-2)":"none"}}>
+                <div className="flex-c gap-3">
+                  <div className="serif" style={{fontSize:20,color:`var(--${z.tone==="sage"?"sage-2":z.tone==="warn"?"warn":"danger"})`,width:28}}>{z.z}</div>
+                  <span className={cx("chip",z.tone)}>{z.risk}</span>
+                </div>
+                <span className="mono" style={{fontSize:16}}>{z.score}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ExecutiveDashboardPage() {
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Executive Overview · Q2 2026</div>
+          <h1>Executive Dashboard</h1>
+          <div className="meta mt-2">ROI Analytics · Sustainability · AI Performance</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <Seg options={[{v:"q",l:"Q2"},{v:"m",l:"Month"},{v:"w",l:"Week"}]} value="q" onChange={()=>{}}/>
+          <button className="btn" onClick={()=>pushToast("Export Executive Report","success")}><I.Export size={14}/> Export</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[
+          {l:"Productivity Score",v:"82",u:"/100",d:"+4 pts",up:true},
+          {l:"ROI",v:"324",u:"%",d:"+18%",up:true},
+          {l:"Water Efficiency",v:"91",u:"%",d:"+3%",up:true},
+          {l:"Energy Efficiency",v:"78",u:"%",d:"-2%",up:false},
+          {l:"Sustainability Score",v:"74",u:"/100",d:"+6",up:true},
+          {l:"Carbon Footprint",v:"2.4",u:"tCO₂e",d:"-8%",up:true},
+          {l:"Revenue (Projected)",v:"84,200",u:"฿",d:"+12%",up:true},
+          {l:"AI Performance",v:"93",u:"%",d:"+1%",up:true},
+        ].map(k=>(
+          <div className="kpi" key={k.l}>
+            <div className="kpi-label">{k.l}</div>
+            <div className="flex-c gap-2" style={{alignItems:"baseline"}}><div className="kpi-value">{k.v}<span className="kpi-unit">{k.u}</span></div></div>
+            <div className={cx("kpi-delta",k.up?"up":"down")}>{k.up?<I.Up size={10}/>:<I.Down size={10}/>} {k.d}</div>
+          </div>
+        ))}
+      </div>
+      <div className="grid g-2 mb-4">
+        <div className="card">
+          <div className="card-h"><div className="card-title">Revenue & Cost Analytics</div><div className="card-sub">MONTHLY · THB</div></div>
+          <Chart data={series("rev",12,40000,90000)} xLabels={["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."]} h={200} color="var(--sage-2)" fill="var(--sage-soft)"/>
+        </div>
+        <div className="card">
+          <div className="card-h"><div className="card-title">Farm Comparison by Zone</div></div>
+          <div style={{display:"flex",flexDirection:"column",gap:14,padding:"8px 0"}}>
+            {[{z:"A",score:92,crop:"ผักสลัด"},{z:"B",score:78,crop:"เมล่อน"},{z:"C",score:65,crop:"มะเขือเทศ"},{z:"D",score:88,crop:"Hydro"}].map(z=>(
+              <div key={z.z} className="flex-c gap-3">
+                <div className="serif" style={{width:28,fontSize:18,color:"var(--sage-2)"}}>Z{z.z}</div>
+                <div style={{flex:1}}>
+                  <div className="flex-cb small mb-1"><span>{z.crop}</span><span className="mono">{z.score}/100</span></div>
+                  <div className="bar" style={{height:8}}><span style={{width:`${z.score}%`,background:z.score>=80?"var(--sage)":z.score>=70?"var(--warn)":"var(--danger)",height:"100%"}}/></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="grid g-3">
+        <div className="card">
+          <div className="card-h"><div className="card-title">Sustainability</div></div>
+          <div style={{display:"flex",justifyContent:"center",padding:"8px 0"}}><Donut value={74} size={110} color="var(--sage)"/></div>
+          <div className="hr"/>
+          {[{l:"Carbon Tracking",v:"2.4 tCO₂e"},{l:"Water Recycled",v:"34%"},{l:"Solar Energy",v:"28%"}].map(x=>(
+            <div key={x.l} className="flex-cb small" style={{padding:"6px 0"}}><span className="muted">{x.l}</span><span className="mono">{x.v}</span></div>
+          ))}
+        </div>
+        <div className="card">
+          <div className="card-h"><div className="card-title">Cost Breakdown</div></div>
+          {[{l:"แรงงาน",pct:38,v:"12,400"},{l:"ปุ๋ย/สาร",pct:24,v:"7,820"},{l:"ไฟฟ้า",pct:18,v:"5,870"},{l:"น้ำ",pct:12,v:"3,910"},{l:"บำรุงรักษา",pct:8,v:"2,610"}].map((c,i)=>(
+            <div key={c.l} style={{padding:"8px 0",borderBottom:i<4?"1px solid var(--hair-2)":"none"}}>
+              <div className="flex-cb small mb-1"><span>{c.l}</span><span className="mono">{c.v} ฿</span></div>
+              <div className="bar"><span style={{width:`${c.pct}%`}}/></div>
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <div className="card-h"><div className="card-title">AI Performance</div></div>
+          {[{l:"Detection Accuracy",v:"94.2%"},{l:"Predictions Made",v:"1,284"},{l:"Automation Runs",v:"59"},{l:"Alerts Resolved",v:"124"},{l:"Water Saved",v:"18%"},{l:"Energy Saved",v:"12%"}].map(x=>(
+            <div key={x.l} className="flex-cb" style={{padding:"9px 0",borderBottom:"1px solid var(--hair-2)"}}>
+              <span className="small muted">{x.l}</span><span className="mono small">{x.v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function AutomationPage() {
+  const [rules, setRules] = React.useState(AUTOMATION_RULES);
+  const toggle = id => setRules(prev => prev.map(r => r.id===id ? {...r, on:!r.on} : r));
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Automation Rule Engine · IF / THEN Logic</div>
+          <h1>Automation Rules</h1>
+          <div className="meta mt-2">{rules.length} rules · {rules.filter(r=>r.on).length} active · {rules.reduce((s,r)=>s+r.runs,0)} total runs</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn" onClick={()=>pushToast("Export rules","success")}><I.Export size={14}/> Export</button>
+          <button className="btn primary" onClick={()=>pushToast("เปิดหน้าสร้าง Rule","success")}><I.Plus size={14}/> สร้าง Rule ใหม่</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[{l:"Rules ทั้งหมด",v:rules.length},{l:"Active",v:rules.filter(r=>r.on).length},{l:"Runs วันนี้",v:rules.reduce((s,r)=>s+r.runs,0)},{l:"Success Rate",v:"94%"}].map(k=>(
+          <div className="kpi" key={k.l}><div className="kpi-label">{k.l}</div><div className="kpi-value">{k.v}</div></div>
+        ))}
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        {rules.map(r=>(
+          <div key={r.id} className="card" style={{borderLeft:`3px solid ${r.on?"var(--sage)":"var(--hair)"}`,padding:"16px 18px"}}>
+            <div className="flex-cb mb-3">
+              <div className="flex-c gap-3">
+                <div style={{width:10,height:10,borderRadius:999,background:r.on?"var(--sage)":"var(--muted-2)",flexShrink:0}}/>
+                <div>
+                  <div className="serif" style={{fontSize:16}}>{r.name}</div>
+                  <div className="tiny mono muted mt-1">{r.id} · โซน {r.zone} · {r.runs} ครั้ง · ล่าสุด: {r.last}</div>
+                </div>
+              </div>
+              <div className="flex-c gap-3">
+                <span className={cx("chip",r.status==="success"?"sage":r.status==="fail"?"danger":"")}>{r.status}</span>
+                <Toggle on={r.on} onClick={()=>toggle(r.id)}/>
+              </div>
+            </div>
+            <div className="grid g-3" style={{gap:10}}>
+              <div style={{background:"var(--cream)",borderRadius:8,padding:"10px 12px"}}>
+                <div className="tiny mono uc muted mb-1">IF Trigger</div>
+                <div className="small ink2">{r.trigger}</div>
+              </div>
+              <div style={{background:"var(--cream)",borderRadius:8,padding:"10px 12px"}}>
+                <div className="tiny mono uc muted mb-1">AND Condition</div>
+                <div className="small ink2">{r.condition}</div>
+              </div>
+              <div style={{background:"var(--sage-soft)",borderRadius:8,padding:"10px 12px"}}>
+                <div className="tiny mono uc muted mb-1" style={{color:"var(--sage-2)"}}>THEN Action</div>
+                <div className="small" style={{color:"var(--sage-2)"}}>{r.action}</div>
+              </div>
+            </div>
+            <div className="flex gap-2 mt-3">
+              <button className="btn" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>pushToast(`แก้ไข ${r.name}`,"success")}><I.Edit size={11}/> แก้ไข</button>
+              <button className="btn" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>pushToast(`ทดสอบ ${r.name}`,"success")}><I.Play size={11}/> Test</button>
+              <button className="btn" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>pushToast(`ประวัติ ${r.name}`,"success")}><I.History size={11}/> ประวัติ</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function VisionAnalyticsPage() {
+  const events = [
+    {id:"EVT-001",type:"โรคใบเหลือง",cam:"CAM-A01",zone:"A",conf:87,sev:"warn",time:"14 พ.ค. 10:22",status:"รอดำเนินการ"},
+    {id:"EVT-002",type:"แมลงศัตรูพืช",cam:"CAM-B01",zone:"B",conf:91,sev:"danger",time:"14 พ.ค. 09:45",status:"กำลังตรวจสอบ"},
+    {id:"EVT-003",type:"บุกรุก",cam:"CAM-A01",zone:"A",conf:78,sev:"danger",time:"13 พ.ค. 23:12",status:"แก้ไขแล้ว"},
+    {id:"EVT-004",type:"การเติบโตปกติ",cam:"CAM-D01",zone:"D",conf:95,sev:"sage",time:"13 พ.ค. 14:00",status:"ปกติ"},
+    {id:"EVT-005",type:"สัตว์ป่าบุกรุก",cam:"CAM-C01",zone:"C",conf:82,sev:"warn",time:"12 พ.ค. 04:38",status:"แก้ไขแล้ว"},
+  ];
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">AI Vision Analytics · Computer Vision</div>
+          <h1>AI Vision Analytics</h1>
+          <div className="meta mt-2">4 cameras · Disease · Pest · Intrusion · Growth Analysis</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn" onClick={()=>pushToast("Refresh AI Models","success")}><I.Refresh size={14}/> Refresh</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[{l:"Detection Events",v:"127",u:"ครั้ง/เดือน"},{l:"Disease Detected",v:"14",u:"ครั้ง"},{l:"Pest Alert",v:"8",u:"ครั้ง"},{l:"Accuracy",v:"94.2",u:"%"}].map(k=>(
+          <div className="kpi" key={k.l}><div className="kpi-label">{k.l}</div><div className="kpi-value">{k.v}<span className="kpi-unit">{k.u}</span></div></div>
+        ))}
+      </div>
+      <div className="grid g-2-1 mb-4">
+        <div className="card">
+          <div className="card-h"><div className="card-title">Camera Feed Preview</div><span className="chip sage" style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="ddot"/>4 Live</span></div>
+          <div className="grid g-2" style={{gap:8}}>
+            {[
+              {id:"CAM-A01",zone:"A",status:"online",det:"โรคใบเหลือง 87%",tone:"warn"},
+              {id:"CAM-B01",zone:"B",status:"online",det:"แมลงศัตรู 91%",tone:"danger"},
+              {id:"CAM-C01",zone:"C",status:"offline",det:"Offline",tone:""},
+              {id:"CAM-D01",zone:"D",status:"online",det:"ปกติ 95%",tone:"sage"},
+            ].map(cam=>(
+              <div key={cam.id} style={{background:"#0d160d",borderRadius:10,overflow:"hidden",position:"relative",cursor:"pointer"}} onClick={()=>pushToast(`เปิด ${cam.id}`)}>
+                <div style={{height:120,display:"grid",placeItems:"center",background:cam.status==="online"?"linear-gradient(135deg,#0d2b0d,#1a3a1a)":"var(--hair-2)"}}>
+                  <div style={{fontFamily:"var(--f-mono)",fontSize:9,color:"rgba(255,255,255,0.4)",textAlign:"center"}}>{cam.status==="online"?"● LIVE":"OFFLINE"}</div>
+                  {cam.tone&&cam.tone!=="sage"&&(
+                    <div style={{position:"absolute",top:8,right:8,background:"rgba(0,0,0,0.7)",borderRadius:6,padding:"3px 7px"}}>
+                      <span className={cx("chip",cam.tone)} style={{fontSize:9}}>{cam.det}</span>
+                    </div>
+                  )}
+                </div>
+                <div style={{padding:"6px 10px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <span style={{fontFamily:"var(--f-mono)",fontSize:10,color:"rgba(255,255,255,0.6)"}}>{cam.id}</span>
+                  <span className={cx("chip",cam.tone||"")} style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="ddot"/>{cam.status==="online"?"Live":"Off"}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-h"><div className="card-title">Detection Models</div></div>
+          {[
+            {l:"Plant Disease",v:"ON",acc:94,tone:"sage"},{l:"Pest Detection",v:"ON",acc:91,tone:"sage"},
+            {l:"Fire & Smoke",v:"ON",acc:97,tone:"sage"},{l:"Intrusion",v:"ON",acc:89,tone:"sage"},
+            {l:"Animal Detection",v:"ON",acc:86,tone:"sage"},{l:"Fruit Counting",v:"OFF",acc:88,tone:""},
+            {l:"Crop Growth AI",v:"ON",acc:92,tone:"sage"},
+          ].map((m,i)=>(
+            <div key={m.l} className="flex-cb" style={{padding:"9px 0",borderBottom:i<6?"1px solid var(--hair-2)":"none"}}>
+              <div className="small ink2">{m.l}</div>
+              <div className="flex-c gap-3">
+                <span className="tiny mono muted">{m.acc}%</span>
+                <span className={cx("chip",m.tone)} style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="ddot"/>{m.v}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="card">
+        <div className="card-h"><div className="card-title">AI Detection Events</div><span className="nav-badge">{events.length}</span></div>
+        <table className="tbl">
+          <thead><tr><th>Event ID</th><th>ประเภท</th><th>Camera</th><th>Zone</th><th>Confidence</th><th>Severity</th><th>เวลา</th><th>สถานะ</th><th></th></tr></thead>
+          <tbody>
+            {events.map(e=>(
+              <tr key={e.id}>
+                <td className="mono small muted">{e.id}</td>
+                <td className="small ink2">{e.type}</td>
+                <td className="mono small">{e.cam}</td>
+                <td><span className="chip">โซน {e.zone}</span></td>
+                <td><div className="flex-c gap-2"><div className="bar" style={{width:60}}><span style={{width:`${e.conf}%`,background:`var(--${e.sev==="danger"?"danger":e.sev==="warn"?"warn":"sage"})`}}/></div><span className="mono small">{e.conf}%</span></div></td>
+                <td><span className={cx("chip",e.sev==="sage"?"sage":e.sev==="warn"?"warn":"danger")}>{e.sev}</span></td>
+                <td className="mono muted small">{e.time}</td>
+                <td className="small">{e.status}</td>
+                <td><button className="icon-btn" onClick={()=>pushToast(`ดู ${e.id}`)}><I.Eye size={12}/></button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+function PredictiveAIPage() {
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Predictive AI · Forecast Engine</div>
+          <h1>Predictive AI Analytics</h1>
+          <div className="meta mt-2">Yield · Disease Risk · Water · Weather · Harvest</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn" onClick={()=>pushToast("Refresh model","success")}><I.Refresh size={14}/> Refresh</button>
+          <button className="btn primary" onClick={()=>pushToast("Export predictions","success")}><I.Export size={14}/> Export</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[
+          {l:"Yield Forecast",v:"1,840",u:"กก.",conf:87,d:"+8%",up:true},
+          {l:"Disease Risk",v:"ปานกลาง",u:"",conf:82,d:"Zone C",up:false},
+          {l:"Water Demand",v:"9,420",u:"L/7วัน",conf:91,d:"+8%",up:true},
+          {l:"Harvest Date",v:"17 พ.ค.",u:"",conf:95,d:"Zone A",up:true},
+        ].map(k=>(
+          <div className="kpi" key={k.l}>
+            <div className="kpi-label">{k.l}</div>
+            <div className="flex-c gap-2" style={{alignItems:"baseline"}}><div className="kpi-value">{k.v}<span className="kpi-unit">{k.u}</span></div></div>
+            <div className="flex-c gap-2 mt-2"><div className={cx("kpi-delta",k.up?"up":"down")}>{k.d}</div><span className="tiny mono muted">conf {k.conf}%</span></div>
+          </div>
+        ))}
+      </div>
+      <div className="grid g-2 mb-4">
+        <div className="card">
+          <div className="card-h"><div className="card-title">Crop Yield Forecast</div><div className="card-sub">7-DAY PROJECTION</div></div>
+          <Chart data={series("yield7",7,200,400)} xLabels={["จ","อ","พ","พฤ","ศ","ส","อา"]} h={200} color="var(--sage-2)" fill="var(--sage-soft)"/>
+          <div className="grid g-3 mt-3">
+            {[{l:"คาดการณ์รวม",v:"1,840 กก."},{l:"Zone A",v:"380 กก."},{l:"Zone B",v:"920 กก."}].map(x=>(
+              <div key={x.l}><div className="tiny mono uc muted">{x.l}</div><div className="serif mt-1" style={{fontSize:16}}>{x.v}</div></div>
+            ))}
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-h"><div className="card-title">Disease Risk by Zone</div></div>
+          <div style={{display:"flex",flexDirection:"column",gap:14,padding:"8px 0"}}>
+            {[
+              {zone:"A",crop:"ผักสลัด",risk:"ต่ำ",pct:15,tone:"sage"},
+              {zone:"B",crop:"เมล่อน",risk:"ต่ำ",pct:22,tone:"sage"},
+              {zone:"C",crop:"มะเขือเทศ",risk:"ปานกลาง",pct:58,tone:"warn"},
+              {zone:"D",crop:"Hydro",risk:"ต่ำ",pct:8,tone:"sage"},
+            ].map(z=>(
+              <div key={z.zone}>
+                <div className="flex-cb small mb-1"><span>Zone {z.zone} — {z.crop}</span><span className={cx("chip",z.tone)}>{z.risk}</span></div>
+                <div className="bar"><span style={{width:`${z.pct}%`,background:`var(--${z.tone==="sage"?"sage":"warn"})`}}/></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="card">
+        <div className="card-h"><div className="card-title">AI Recommended Actions</div><span className="chip info">30-day data</span></div>
+        <div className="grid g-3">
+          {[
+            {icon:"Wave",tone:"info",title:"เพิ่มการรดน้ำ Zone C",desc:"อุณหภูมิจะสูงถึง 36°C ช่วงพุธ-ศุกร์ ต้องการน้ำเพิ่ม 15%",conf:91},
+            {icon:"Leaf",tone:"warn",title:"ตรวจโรค Zone C ล่วงหน้า",desc:"ความเสี่ยงโรคใบจุดสูง แนะนำฉีดสารป้องกันวันพฤหัส",conf:82},
+            {icon:"Sun",tone:"sage",title:"เก็บเกี่ยว Zone A พรุ่งนี้",desc:"ผักสลัดโซน A พร้อมเก็บเกี่ยว 17 พ.ค. ประมาณ 380 กก.",conf:95},
+          ].map((r,i)=>(
+            <div key={i} style={{background:"var(--cream)",borderRadius:10,padding:"16px"}}>
+              <div style={{width:36,height:36,borderRadius:10,background:`var(--${r.tone}-soft)`,color:`var(--${r.tone==="sage"?"sage-2":r.tone})`,display:"grid",placeItems:"center",marginBottom:10}}>
+                {React.createElement(I[r.icon]||I.AI,{size:18})}
+              </div>
+              <div className="serif" style={{fontSize:14,marginBottom:6}}>{r.title}</div>
+              <div className="small muted">{r.desc}</div>
+              <div className="flex-c gap-2 mt-3"><div className="bar" style={{flex:1}}><span style={{width:`${r.conf}%`}}/></div><span className="tiny mono muted">{r.conf}%</span></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function AIAssistantPage() {
+  const [messages, setMessages] = React.useState([
+    {role:"assistant",text:"สวัสดีครับ! ผมคือ AI Farm Assistant ของ Kaimuk Smart Farm พร้อมช่วยตอบคำถามเกี่ยวกับฟาร์ม 🌿"},
+  ]);
+  const [input, setInput] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const endRef = React.useRef(null);
+  const suggested = ["โซนไหนต้องการน้ำบ้าง?","อุปกรณ์ไหน Offline?","ความเสี่ยงโรคพืชวันนี้?","เมื่อไหร่ควรเก็บเกี่ยว?","ทำไม Zone B อุณหภูมิสูง?","แสดง Critical Alerts ทั้งหมด"];
+  const ANSWERS = {
+    "โซนไหนต้องการน้ำ":"โซน C มีความชื้นดิน 22% ต่ำวิกฤต ต้องการรดน้ำทันที ส่วนโซน A อยู่ที่ 41% ใกล้ค่าเกณฑ์ แนะนำเฝ้าระวัง",
+    "อุปกรณ์ไหน offline":"อุปกรณ์ที่ Offline: PMP-02 (ปั๊มสำรอง) และ Sensor PH-02 ที่ไม่ส่งข้อมูล 10 นาที ควรตรวจสอบสายสัญญาณ",
+    "ความเสี่ยงโรคพืช":"โซน C มีความเสี่ยงสูง (58%) เนื่องจากความชื้นสะสม แนะนำฉีดสารป้องกัน Zone A-B ความเสี่ยงต่ำ (<20%)",
+    "เมื่อไหร่ควรเก็บเกี่ยว":"Zone A (ผักสลัด) พร้อม 17 พ.ค. ประมาณ 380 กก. / Zone D พร้อม 30 พ.ค. / Melon B และ Tomato C รอถึงมิถุนายน",
+    "critical alerts":"Critical Alerts ขณะนี้: 1) ถัง TK-03 เหลือ 15% (Zone C), 2) Soil Moisture 22% วิกฤต (Zone C), 3) อุณหภูมิ 37.2°C สูง (Zone B)",
+  };
+  function getAnswer(q) {
+    const lq = q.toLowerCase();
+    for (const [k,v] of Object.entries(ANSWERS)) {
+      if (lq.includes(k.toLowerCase().replace("?",""))) return v;
+    }
+    return `ได้รับคำถาม: "${q}" — จากข้อมูลเซ็นเซอร์และอุปกรณ์: ฟาร์มทำงานปกติ 98.2% จุดที่ต้องเฝ้าระวังคือ Zone C (น้ำต่ำ) และโรงเรือน B (อุณหภูมิสูง) ครับ`;
+  }
+  function send(q) {
+    if (!q.trim()) return;
+    setMessages(prev => [...prev, {role:"user",text:q}]);
+    setInput(""); setLoading(true);
+    setTimeout(() => { setMessages(prev => [...prev, {role:"assistant",text:getAnswer(q)}]); setLoading(false); }, 800 + Math.random()*600);
+  }
+  React.useEffect(() => { endRef.current?.scrollIntoView({behavior:"smooth"}); }, [messages]);
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">AI Farm Assistant · Conversational AI</div>
+          <h1>AI Farm Assistant</h1>
+          <div className="meta mt-2">ถามคำถามเกี่ยวกับฟาร์ม เซ็นเซอร์ อุปกรณ์ และ AI Recommendations</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn" onClick={()=>setMessages([{role:"assistant",text:"สวัสดีครับ! พร้อมช่วยเหลือครับ 🌿"}])}><I.Refresh size={14}/> ล้างประวัติ</button>
+        </div>
+      </div>
+      <div className="grid g-1-2" style={{gap:20,alignItems:"start"}}>
+        <div style={{display:"flex",flexDirection:"column",gap:12}}>
+          <div className="card">
+            <div className="card-h"><div className="card-title">คำถามแนะนำ</div></div>
+            {suggested.map((q,i)=>(
+              <div key={i} onClick={()=>send(q)} style={{padding:"10px 12px",borderRadius:8,border:"1px solid var(--hair-2)",cursor:"pointer",fontSize:13,marginBottom:8,display:"flex",alignItems:"center",gap:10}} onMouseEnter={e=>e.currentTarget.style.background="var(--cream)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                <I.AI size={14} stroke="var(--sage-2)"/><span>{q}</span>
+              </div>
+            ))}
+          </div>
+          <div className="card" style={{background:"var(--cream)"}}>
+            <div className="tiny mono uc muted mb-3">AI Context</div>
+            {[{l:"Sensors Online",v:"248"},{l:"Devices Active",v:"5/6"},{l:"Alerts ใหม่",v:"3"},{l:"Rules Active",v:"5"},{l:"Model",v:"AI Farm v3.2"}].map(x=>(
+              <div key={x.l} className="flex-cb small" style={{padding:"5px 0"}}><span className="muted">{x.l}</span><span className="mono">{x.v}</span></div>
+            ))}
+          </div>
+        </div>
+        <div className="card" style={{padding:0,overflow:"hidden",display:"flex",flexDirection:"column"}}>
+          <div style={{flex:1,overflowY:"auto",padding:"18px",maxHeight:480,minHeight:340,display:"flex",flexDirection:"column",gap:12}}>
+            {messages.map((m,i)=>(
+              <div key={i} style={{display:"flex",gap:10,justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
+                {m.role==="assistant"&&<div style={{width:32,height:32,borderRadius:8,background:"var(--ink)",color:"white",display:"grid",placeItems:"center",flexShrink:0,marginTop:2}}><I.AI size={15} stroke="white"/></div>}
+                <div style={{maxWidth:"80%",padding:"10px 14px",borderRadius:m.role==="user"?"12px 12px 4px 12px":"12px 12px 12px 4px",background:m.role==="user"?"var(--ink)":"var(--cream)",color:m.role==="user"?"white":"var(--ink)",fontSize:13,lineHeight:1.55}}>{m.text}</div>
+                {m.role==="user"&&<div style={{width:32,height:32,borderRadius:8,background:"var(--sage)",color:"white",display:"grid",placeItems:"center",flexShrink:0,marginTop:2,fontFamily:"var(--f-serif)",fontSize:13}}>ฉ</div>}
+              </div>
+            ))}
+            {loading&&<div style={{display:"flex",gap:10}}><div style={{width:32,height:32,borderRadius:8,background:"var(--ink)",color:"white",display:"grid",placeItems:"center",flexShrink:0}}><I.AI size={15} stroke="white"/></div><div style={{padding:"12px 16px",borderRadius:"12px 12px 12px 4px",background:"var(--cream)",display:"flex",gap:5,alignItems:"center"}}>{[0,1,2].map(i=><span key={i} style={{width:7,height:7,borderRadius:999,background:"var(--muted-2)",animation:`bounce ${0.6}s ease ${i*0.15}s infinite alternate`}}/>)}</div></div>}
+            <div ref={endRef}/>
+          </div>
+          <div style={{borderTop:"1px solid var(--hair-2)",padding:"14px 18px",display:"flex",gap:10}}>
+            <div style={{flex:1,display:"flex",alignItems:"center",gap:8,background:"var(--cream)",border:"1px solid var(--hair-2)",borderRadius:10,padding:"8px 12px"}}>
+              <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send(input)} placeholder="ถามเกี่ยวกับฟาร์ม..." style={{flex:1,border:"none",background:"transparent",outline:"none",fontFamily:"var(--f-sans)",fontSize:13,color:"var(--ink)"}}/>
+            </div>
+            <button className="btn primary" onClick={()=>send(input)} disabled={!input.trim()}><I.Right size={16}/></button>
+          </div>
+          <style>{`@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-5px)}}`}</style>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function DroneIntelligencePage() {
+  const [selected, setSelected] = React.useState(DRONE_MISSIONS[0]);
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Drone Intelligence · Aerial Monitoring</div>
+          <h1>Drone Intelligence</h1>
+          <div className="meta mt-2">NDVI · Thermal · Crop Health · Flight History</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn" onClick={()=>pushToast("สร้าง Mission ใหม่","success")}><I.Plus size={14}/> New Mission</button>
+          <button className="btn sage" onClick={()=>pushToast("Launch Drone","success")}><I.Up size={14}/> Launch</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[{l:"Missions ทั้งหมด",v:DRONE_MISSIONS.length},{l:"Completed",v:DRONE_MISSIONS.filter(m=>m.status==="completed").length},{l:"Avg NDVI",v:"0.68"},{l:"Findings",v:"7"}].map(k=>(
+          <div className="kpi" key={k.l}><div className="kpi-label">{k.l}</div><div className="kpi-value">{k.v}</div></div>
+        ))}
+      </div>
+      <div className="grid g-2-1">
+        <div style={{display:"flex",flexDirection:"column",gap:16}}>
+          <div className="card" style={{padding:0,overflow:"hidden"}}>
+            <div style={{height:280,background:"linear-gradient(135deg,#e8f4e8,#c8e6c8,#a8d8a8)",position:"relative",display:"grid",placeItems:"center"}}>
+              <div style={{textAlign:"center",color:"rgba(0,0,0,0.5)"}}>
+                <I.Map size={32} stroke="rgba(0,0,0,0.4)"/>
+                <div style={{fontFamily:"var(--f-mono)",fontSize:11,marginTop:8}}>Aerial Map — Kaimuk Farm · NDVI Overlay</div>
+              </div>
+              {[{x:"20%",y:"30%",label:"A",c:"#22c55e"},{x:"60%",y:"25%",label:"B",c:"#22c55e"},{x:"25%",y:"65%",label:"C",c:"#f59e0b"},{x:"70%",y:"70%",label:"D",c:"#22c55e"}].map(z=>(
+                <div key={z.label} style={{position:"absolute",left:z.x,top:z.y,width:28,height:28,borderRadius:999,background:z.c,color:"white",display:"grid",placeItems:"center",fontSize:11,fontWeight:600,boxShadow:"0 2px 8px rgba(0,0,0,0.3)"}}>{z.label}</div>
+              ))}
+              <div style={{position:"absolute",top:8,right:8,background:"rgba(0,0,0,0.6)",borderRadius:8,padding:"6px 10px",fontFamily:"var(--f-mono)",fontSize:10,color:"white"}}>🛸 DJI Phantom 4</div>
+            </div>
+          </div>
+          <div className="grid g-2" style={{gap:12}}>
+            <div className="card">
+              <div className="card-h"><div className="card-title">NDVI Analysis</div></div>
+              {[{z:"A",val:0.74,c:"sage"},{z:"B",val:0.71,c:"sage"},{z:"C",val:0.61,c:"warn"},{z:"D",val:0.68,c:"sage"}].map((z,i)=>(
+                <div key={z.z} style={{padding:"8px 0",borderBottom:i<3?"1px solid var(--hair-2)":"none"}}>
+                  <div className="flex-cb small mb-1"><span>Zone {z.z}</span><span className="mono">{z.val}</span></div>
+                  <div className="bar"><span style={{width:`${z.val*100}%`,background:`var(--${z.c==="sage"?"sage":"warn"})`}}/></div>
+                </div>
+              ))}
+            </div>
+            <div className="card">
+              <div className="card-h"><div className="card-title">Thermal Map</div></div>
+              {[{z:"A",val:29,c:"sage"},{z:"B",val:34,c:"warn"},{z:"C",val:32,c:"warn"},{z:"D",val:27,c:"sage"}].map((z,i)=>(
+                <div key={z.z} className="flex-cb" style={{padding:"8px 0",borderBottom:i<3?"1px solid var(--hair-2)":"none"}}>
+                  <span className="small">Zone {z.z}</span>
+                  <span className={cx("chip",z.c)}>{z.val}°C</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-h"><div className="card-title">Flight History</div><span className="nav-badge">{DRONE_MISSIONS.length}</span></div>
+          <div style={{display:"flex",flexDirection:"column",gap:8}}>
+            {DRONE_MISSIONS.map(m=>(
+              <div key={m.id} onClick={()=>setSelected(m)} style={{padding:"12px 14px",borderRadius:10,border:`1px solid ${selected?.id===m.id?"var(--ink)":"var(--hair-2)"}`,background:selected?.id===m.id?"var(--ink)":"var(--paper-2)",color:selected?.id===m.id?"white":"var(--ink)",cursor:"pointer",transition:"all 0.15s"}}>
+                <div className="flex-cb mb-1">
+                  <div style={{fontSize:13}}>{m.name}</div>
+                  <span className={cx("chip",m.status==="completed"?"sage":m.status==="scheduled"?"info":"warn")}>{m.status}</span>
+                </div>
+                <div style={{fontFamily:"var(--f-mono)",fontSize:10,opacity:0.7}}>{m.date} · {m.area} · {m.duration}</div>
+                {m.ndvi&&<div style={{fontFamily:"var(--f-mono)",fontSize:10,opacity:0.7}}>NDVI: {m.ndvi} · Findings: {m.findings}</div>}
+              </div>
+            ))}
+          </div>
+          {selected&&(
+            <div style={{marginTop:14,padding:"14px",background:"var(--cream)",borderRadius:10}}>
+              <div className="tiny mono uc muted mb-3">Mission Details</div>
+              {[{l:"Mission ID",v:selected.id},{l:"Pilot",v:selected.pilot},{l:"Area",v:selected.area},{l:"Altitude",v:`${selected.alt}m`},{l:"Battery",v:`${selected.battery}%`},{l:"Findings",v:`${selected.findings} จุด`}].map(x=>(
+                <div key={x.l} className="flex-cb" style={{padding:"5px 0",borderBottom:"1px solid var(--hair-2)"}}>
+                  <span className="tiny muted">{x.l}</span><span className="mono small">{x.v}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function WaterManagementPage() {
+  const [tanks] = React.useState(WATER_TANKS);
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Water Management · ระบบจัดการน้ำ</div>
+          <h1>Water Management</h1>
+          <div className="meta mt-2">4 tanks · 2 pumps · Water Efficiency 91%</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn" onClick={()=>pushToast("เปิดตาราง Irrigation","success")}><I.Calendar size={14}/> Schedule</button>
+          <button className="btn primary" onClick={()=>pushToast("Start Irrigation Zone A","success")}><I.Wave size={14}/> Start Irrigation</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[{l:"ปริมาณน้ำรวม",v:"13,580",u:"/ 26,000 L"},{l:"ใช้น้ำวันนี้",v:"1,240",u:"L"},{l:"Water Efficiency",v:"91",u:"%"},{l:"Leakage Alert",v:"0",u:"จุด"}].map(k=>(
+          <div className="kpi" key={k.l}><div className="kpi-label">{k.l}</div><div className="kpi-value">{k.v}<span className="kpi-unit">{k.u}</span></div></div>
+        ))}
+      </div>
+      <div className="grid g-4 mb-4">
+        {tanks.map(t=>{
+          const pct = Math.round((t.cur/t.cap)*100);
+          const tone = pct<20?"danger":pct<40?"warn":"sage";
+          return (
+            <div key={t.id} className="card" style={{borderTop:`3px solid var(--${tone==="sage"?"sage":tone==="warn"?"warn":"danger"})`}}>
+              <div className="card-h mb-2">
+                <div><div className="card-title" style={{fontSize:14}}>{t.name}</div><div className="tiny mono muted">{t.id} · Zone {t.zone}</div></div>
+                <span className={cx("chip",tone)} style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="ddot"/>{tone==="sage"?"ปกติ":tone==="warn"?"ต่ำ":"วิกฤต"}</span>
+              </div>
+              <div style={{display:"flex",justifyContent:"center",padding:"12px 0"}}><Donut value={pct} size={80} color={`var(--${tone==="sage"?"sage":tone==="warn"?"warn":"danger"})`}/></div>
+              <div className="flex-cb tiny mono muted mt-2"><span>{t.cur.toLocaleString()} L</span><span>{t.cap.toLocaleString()} L</span></div>
+              <div className="flex gap-2 mt-3">
+                <button className="btn" style={{flex:1,justifyContent:"center",fontSize:11,padding:"5px 8px"}} onClick={()=>pushToast(`เปิดปั๊ม ${t.id}`,"success")}><I.Power size={11}/> เปิดปั๊ม</button>
+                <button className="btn" style={{flex:1,justifyContent:"center",fontSize:11,padding:"5px 8px"}} onClick={()=>pushToast(`ดูข้อมูล ${t.id}`,"success")}><I.Eye size={11}/> ดูข้อมูล</button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="grid g-2">
+        <div className="card">
+          <div className="card-h"><div className="card-title">Water Usage (30 วัน)</div><div className="card-sub">ลิตร/วัน</div></div>
+          <Chart data={series("wateruse",30,900,1800)} xLabels={["1","6","12","18","24","30"]} h={200} color="var(--info)" fill="var(--info-soft)"/>
+        </div>
+        <div className="card">
+          <div className="card-h"><div className="card-title">AI Water-Saving Tips</div></div>
+          {[
+            {text:"ลด Irrigation Zone A 10% เนื่องจากฝนคาดว่าจะตกอาทิตย์นี้",save:"120 L/วัน"},
+            {text:"Zone B ควรรดน้ำตอน 06:00 แทน 10:00 ลดการระเหย",save:"85 L/วัน"},
+            {text:"ติดตั้ง Drip Irrigation Zone C ลดน้ำได้ 25%",save:"240 L/วัน"},
+          ].map((r,i)=>(
+            <div key={i} style={{padding:"12px 0",borderBottom:i<2?"1px solid var(--hair-2)":"none"}}>
+              <div className="small ink2 mb-1">{r.text}</div>
+              <span className="chip info">ประหยัด {r.save}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function EnergyManagementPage() {
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Energy Management · Solar + Grid</div>
+          <h1>Energy Management</h1>
+          <div className="meta mt-2">การใช้ไฟฟ้า · Solar Generation · Battery Storage</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn" onClick={()=>pushToast("Export Energy Report","success")}><I.Export size={14}/> Export</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[
+          {l:"ใช้ไฟฟ้าวันนี้",v:"19.0",u:"kWh",d:"+4%",up:false},
+          {l:"Solar Generation",v:"8.4",u:"kWh",d:"+12%",up:true},
+          {l:"Battery Storage",v:"74",u:"%",d:"3.2 kWh",up:true},
+          {l:"ค่าไฟประมาณ",v:"76",u:"฿/วัน",d:"-8%",up:true},
+        ].map(k=>(
+          <div className="kpi" key={k.l}>
+            <div className="kpi-label">{k.l}</div>
+            <div className="flex-c gap-2" style={{alignItems:"baseline"}}><div className="kpi-value">{k.v}<span className="kpi-unit">{k.u}</span></div></div>
+            <div className={cx("kpi-delta",k.up?"up":"down")}>{k.d}</div>
+          </div>
+        ))}
+      </div>
+      <div className="grid g-2-1 mb-4">
+        <div className="card">
+          <div className="card-h"><div className="card-title">Energy Consumption (7 วัน)</div><div className="card-sub">kWh</div></div>
+          <Chart data={series("energy7",7,14,26)} xLabels={["จ","อ","พ","พฤ","ศ","ส","อา"]} h={200} color="var(--warn)" fill="var(--warn-soft)"/>
+        </div>
+        <div className="card">
+          <div className="card-h"><div className="card-title">Energy by Device</div></div>
+          {ENERGY_DATA.map((e,i)=>(
+            <div key={e.device} style={{padding:"8px 0",borderBottom:i<ENERGY_DATA.length-1?"1px solid var(--hair-2)":"none"}}>
+              <div className="flex-cb small mb-1"><span>{e.device}</span><span className="mono">{e.kwh} kWh</span></div>
+              <div className="bar"><span style={{width:`${e.pct}%`,background:"var(--warn)"}}/></div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="card">
+        <div className="card-h"><div className="card-title">AI Energy-Saving Tips</div></div>
+        <div className="grid g-3">
+          {[
+            {text:"ปรับเวลาปั๊มน้ำเป็น Off-Peak (22:00-06:00) ประหยัดค่าไฟ 30%",save:"22 ฿/วัน"},
+            {text:"Grow Light Zone D ควรใช้ LED Full-Spectrum ลดการใช้ 40%",save:"1.4 kWh"},
+            {text:"ติด Solar Panel เพิ่ม 4 แผง คืนทุนใน 2.5 ปี",save:"35%"},
+          ].map((r,i)=>(
+            <div key={i} style={{background:"var(--cream)",borderRadius:10,padding:"16px"}}>
+              <div style={{width:32,height:32,borderRadius:8,background:"var(--warn-soft)",color:"var(--warn)",display:"grid",placeItems:"center",marginBottom:10}}><I.Sun size={16}/></div>
+              <div className="small ink2 mb-2">{r.text}</div>
+              <span className="chip sage">ประหยัด {r.save}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ProductionPage() {
+  const stages = ["เตรียมดิน","หว่าน/ปลูก","เติบโต","ดอกบาน","ผลโต","เก็บเกี่ยว"];
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Production Management · Crop Tracking</div>
+          <h1>Farm Production</h1>
+          <div className="meta mt-2">{CROPS.length} batches · 2 เตรียมเก็บเกี่ยว</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn primary" onClick={()=>pushToast("เพิ่ม Crop Batch","success")}><I.Plus size={14}/> New Batch</button>
+          <button className="btn" onClick={()=>pushToast("Export production","success")}><I.Export size={14}/> Export</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[{l:"Crop Batches",v:CROPS.length},{l:"Yield Forecast",v:"2,150",u:"กก."},{l:"Revenue Forecast",v:"84,200",u:"฿"},{l:"Avg ROI",v:"324",u:"%"}].map(k=>(
+          <div className="kpi" key={k.l}><div className="kpi-label">{k.l}</div><div className="kpi-value">{k.v}<span className="kpi-unit">{k.u||""}</span></div></div>
+        ))}
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:16}}>
+        {CROPS.map(c=>{
+          const idx = stages.indexOf(c.stage);
+          return (
+            <div key={c.id} className="card">
+              <div className="flex-cb mb-3">
+                <div>
+                  <div className="serif" style={{fontSize:17}}>{c.name}</div>
+                  <div className="tiny mono muted">{c.id} · Zone {c.zone} · ปลูก {c.planted} → {c.harvest}</div>
+                </div>
+                <div className="flex-c gap-2">
+                  <span className="chip">{c.zone}</span>
+                  <span className="chip sage">{c.stage}</span>
+                  {c.quality!=="—"&&<span className="chip info">คุณภาพ {c.quality}</span>}
+                </div>
+              </div>
+              <div className="tiny mono uc muted mb-2">Growth Stage</div>
+              <div style={{display:"flex",gap:6,marginBottom:14}}>
+                {stages.map((s,i)=>(
+                  <div key={s} style={{flex:1,textAlign:"center"}}>
+                    <div style={{height:6,borderRadius:999,background:i<=idx?"var(--sage)":"var(--hair-2)",marginBottom:4}}/>
+                    <div style={{fontSize:9,fontFamily:"var(--f-mono)",color:i===idx?"var(--sage-2)":i<idx?"var(--muted)":"var(--muted-2)",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{s}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="grid g-4">
+                {[{l:"Yield Est.",v:`${c.yield_est} กก.`},{l:"Actual",v:"—"},{l:"Cost",v:`${c.cost.toLocaleString()} ฿`},{l:"Quality",v:c.quality}].map(x=>(
+                  <div key={x.l}><div className="tiny mono uc muted">{x.l}</div><div className="mono mt-1">{x.v}</div></div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+function InventoryPage() {
+  const [search, setSearch] = React.useState("");
+  const filtered = INVENTORY.filter(i => !search || i.name.toLowerCase().includes(search.toLowerCase()));
+  const catColors = {fertilizer:"sage",seed:"info",chemical:"warn",equipment:"",spare:""};
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Inventory Management · Stock Control</div>
+          <h1>Inventory</h1>
+          <div className="meta mt-2">{INVENTORY.length} รายการ · {INVENTORY.filter(i=>i.stock<=i.low).length} Low Stock</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <div className="search"><I.Search size={14}/><input placeholder="ค้นหา..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
+          <button className="btn primary" onClick={()=>pushToast("Stock In","success")}><I.Plus size={14}/> Stock In</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[{l:"รายการทั้งหมด",v:INVENTORY.length},{l:"Low Stock",v:INVENTORY.filter(i=>i.stock<=i.low).length},{l:"มูลค่าสต็อก",v:"38,420",u:"฿"},{l:"หมวดหมู่",v:"5",u:"ประเภท"}].map(k=>(
+          <div className="kpi" key={k.l}><div className="kpi-label">{k.l}</div><div className="kpi-value">{k.v}<span className="kpi-unit">{k.u||""}</span></div></div>
+        ))}
+      </div>
+      <div className="card">
+        <div className="card-h"><div className="card-title">สต็อกคงเหลือ</div><span className="nav-badge">{filtered.length} รายการ</span></div>
+        <table className="tbl">
+          <thead><tr><th>รหัส</th><th>ชื่อ</th><th>หมวด</th><th>สต็อก</th><th>หน่วย</th><th>ราคา/หน่วย</th><th>โซน</th><th>สถานะ</th><th></th></tr></thead>
+          <tbody>
+            {filtered.map(item=>{
+              const low = item.stock<=item.low;
+              return (
+                <tr key={item.id}>
+                  <td className="mono small muted">{item.id}</td>
+                  <td className="small ink2">{item.name}</td>
+                  <td><span className={cx("chip",catColors[item.cat]||"")}>{item.cat}</span></td>
+                  <td className="mono">{item.stock}{low&&<span style={{width:8,height:8,borderRadius:999,background:"var(--warn)",display:"inline-block",marginLeft:6}}/>}</td>
+                  <td className="mono small muted">{item.unit}</td>
+                  <td className="mono small">{item.price} ฿</td>
+                  <td className="small muted">{item.zone}</td>
+                  <td><span className={cx("chip",low?"warn":"sage")}>{low?"Low Stock":"ปกติ"}</span></td>
+                  <td><div className="flex gap-2">
+                    <button className="icon-btn" onClick={()=>pushToast(`Stock In ${item.name}`,"success")}><I.Plus size={12}/></button>
+                    <button className="icon-btn" onClick={()=>pushToast(`ประวัติ ${item.id}`)}><I.History size={12}/></button>
+                  </div></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+function MaintenancePage() {
+  const [tasks, setTasks] = React.useState(MAINTENANCE);
+  const statusColor = {upcoming:"info",overdue:"danger",completed:"sage"};
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Maintenance Management · Task Tracking</div>
+          <h1>Maintenance</h1>
+          <div className="meta mt-2">{tasks.length} งาน · {tasks.filter(t=>t.status==="overdue").length} Overdue · {tasks.filter(t=>t.status==="upcoming").length} Upcoming</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn primary" onClick={()=>pushToast("สร้าง Maintenance Ticket","success")}><I.Plus size={14}/> สร้างงาน</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[{l:"งานทั้งหมด",v:tasks.length},{l:"Overdue",v:tasks.filter(t=>t.status==="overdue").length},{l:"Upcoming",v:tasks.filter(t=>t.status==="upcoming").length},{l:"ค่าบำรุงรักษา",v:`${tasks.reduce((s,t)=>s+t.cost,0).toLocaleString()}`,u:"฿"}].map(k=>(
+          <div className="kpi" key={k.l}><div className="kpi-label">{k.l}</div><div className="kpi-value">{k.v}<span className="kpi-unit">{k.u||""}</span></div></div>
+        ))}
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {tasks.map(t=>(
+          <div key={t.id} className="card" style={{padding:"16px 18px",borderLeft:`3px solid var(--${t.status==="overdue"?"danger":t.status==="completed"?"sage":"info"})`}}>
+            <div className="flex-cb">
+              <div className="flex-c gap-3">
+                <div style={{width:40,height:40,borderRadius:10,background:`var(--${t.priority==="high"?"danger":t.priority==="medium"?"warn":"info"}-soft)`,color:`var(--${t.priority==="high"?"danger":t.priority==="medium"?"warn":"info"})`,display:"grid",placeItems:"center",flexShrink:0}}>
+                  <I.Pump size={18}/>
+                </div>
+                <div>
+                  <div className="serif" style={{fontSize:15}}>{t.device}</div>
+                  <div className="small muted">{t.type}</div>
+                  <div className="tiny mono muted mt-1">{t.id} · ช่าง: {t.tech} · กำหนด: {t.due}</div>
+                </div>
+              </div>
+              <div className="flex-c gap-3">
+                <span className={cx("chip",t.priority==="high"?"danger":t.priority==="medium"?"warn":"")}>{t.priority}</span>
+                <span className={cx("chip",statusColor[t.status])}>{t.status}</span>
+                <span className="mono small">{t.cost>0?`${t.cost} ฿`:"ฟรี"}</span>
+                {t.status!=="completed"&&<button className="btn" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>{setTasks(prev=>prev.map(x=>x.id===t.id?{...x,status:"completed"}:x));pushToast(`เสร็จสิ้น: ${t.device}`,"success");}}><I.Check size={11}/> Done</button>}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function NotificationsPage() {
+  const [notifs, setNotifs] = React.useState(NOTIFICATIONS_DATA);
+  const [filter, setFilter] = React.useState("all");
+  const markRead = id => setNotifs(prev => prev.map(n => n.id===id?{...n,read:true}:n));
+  const markAllRead = () => setNotifs(prev => prev.map(n => ({...n,read:true})));
+  const sevTone = {critical:"danger",danger:"danger",warning:"warn",info:"info"};
+  const filtered = filter==="all"?notifs:filter==="unread"?notifs.filter(n=>!n.read):notifs.filter(n=>n.sev===filter);
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Notification Center · Real-time</div>
+          <h1>Notifications</h1>
+          <div className="meta mt-2">{notifs.filter(n=>!n.read).length} ยังไม่อ่าน · {notifs.length} รายการ</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn" onClick={markAllRead}><I.Check size={14}/> อ่านทั้งหมด</button>
+          <button className="btn" onClick={()=>pushToast("เปิดการตั้งค่า","success")}><I.Gear size={14}/> Settings</button>
+        </div>
+      </div>
+      <div className="grid g-4 mb-4">
+        {[{l:"ทั้งหมด",v:notifs.length,f:"all"},{l:"Critical",v:notifs.filter(n=>n.sev==="critical").length,f:"critical"},{l:"Warning",v:notifs.filter(n=>n.sev==="warning").length,f:"warning"},{l:"Info",v:notifs.filter(n=>n.sev==="info").length,f:"info"}].map(k=>(
+          <div key={k.l} className="kpi" style={{cursor:"pointer",borderTop:`3px solid ${filter===k.f?"var(--ink)":"transparent"}`}} onClick={()=>setFilter(k.f)}>
+            <div className="kpi-label">{k.l}</div><div className="kpi-value">{k.v}</div>
+          </div>
+        ))}
+      </div>
+      <div className="flex-c gap-2 mb-4">
+        {["all","unread","critical","warning","info"].map(f=>(
+          <div key={f} onClick={()=>setFilter(f)} className={cx("chip",filter===f&&"sage")} style={{cursor:"pointer"}}>{f}</div>
+        ))}
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {filtered.map(n=>(
+          <div key={n.id} style={{background:n.read?"var(--paper-2)":"var(--paper)",border:`1px solid ${n.read?"var(--hair-2)":"var(--hair)"}`,borderRadius:12,padding:"16px 18px",display:"flex",gap:14,alignItems:"flex-start",opacity:n.read?0.75:1}}>
+            <div style={{width:10,height:10,borderRadius:999,background:`var(--${sevTone[n.sev]||"muted-2"})`,marginTop:4,flexShrink:0}}/>
+            <div style={{flex:1}}>
+              <div className="flex-cb mb-1">
+                <div style={{fontSize:14,fontWeight:n.read?400:500}}>{n.title}</div>
+                <div className="flex-c gap-2"><span className={cx("chip",sevTone[n.sev]||"")}>{n.sev}</span><span className="tiny mono muted">{n.time}</span></div>
+              </div>
+              <div className="small muted mb-2">{n.msg}</div>
+              <div className="flex-c gap-3 tiny mono muted"><span>Farm: {n.farm}</span><span>Zone: {n.zone}</span><span>Device: {n.device}</span></div>
+            </div>
+            {!n.read&&<button className="btn" style={{fontSize:11,padding:"5px 10px",flexShrink:0}} onClick={()=>markRead(n.id)}><I.Check size={11}/> อ่านแล้ว</button>}
+          </div>
+        ))}
+      </div>
+      <div className="card mt-4">
+        <div className="card-h"><div className="card-title">Notification Channels</div></div>
+        <div className="grid g-4">
+          {[{name:"LINE Notify",icon:"Bell",status:"connected",count:24},{name:"Telegram",icon:"Telegram",status:"connected",count:18},{name:"Email",icon:"Mail",status:"connected",count:7},{name:"SMS",icon:"Bell",status:"disconnected",count:0}].map(ch=>(
+            <div key={ch.name} style={{background:"var(--cream)",borderRadius:10,padding:"14px"}}>
+              <div className="flex-cb mb-2">
+                <div className="flex-c gap-2">{React.createElement(I[ch.icon]||I.Bell,{size:16})}<span className="small ink2">{ch.name}</span></div>
+                <span className={cx("chip",ch.status==="connected"?"sage":"")}>{ch.status}</span>
+              </div>
+              <div className="tiny mono muted">{ch.count} alerts/วัน</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function DigitalTwinPage() {
+  const [selZone, setSelZone] = React.useState(null);
+  const zData = {
+    A:{crop:"ผักสลัด",temp:28.4,hum:72,soil:41,status:"sage",alerts:0},
+    B:{crop:"เมล่อน",temp:36.8,hum:78,soil:55,status:"warn",alerts:1},
+    C:{crop:"มะเขือเทศ",temp:31.2,hum:65,soil:22,status:"danger",alerts:2},
+    D:{crop:"Hydro",temp:26.4,hum:80,soil:85,status:"sage",alerts:0},
+  };
+  return (
+    <>
+      <div className="page-head">
+        <div>
+          <div className="muted small uc">Digital Twin Farm · Virtual Model</div>
+          <h1>Digital Twin</h1>
+          <div className="meta mt-2">Real-time overlay · Device status · AI hotspots</div>
+        </div>
+        <div className="spacer"/>
+        <div className="actions">
+          <button className="btn" onClick={()=>pushToast("Simulate drought","success")}><I.AI size={14}/> Simulate</button>
+          <button className="btn" onClick={()=>pushToast("Export twin data","success")}><I.Export size={14}/> Export</button>
+        </div>
+      </div>
+      <div className="grid g-2-1">
+        <div className="card" style={{padding:0,overflow:"hidden"}}>
+          <div style={{background:"linear-gradient(180deg,#e8f5e8 0%,#c8e6c8 40%,#b8ddb8 100%)",minHeight:460,position:"relative",padding:24}}>
+            <div className="tiny mono uc muted" style={{marginBottom:16}}>Digital Twin — Kaimuk Farm · Real-time</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,height:340}}>
+              {["A","B","C","D"].map(z=>{
+                const d = zData[z];
+                const cols = {sage:"#22c55e",warn:"#f59e0b",danger:"#ef4444"};
+                const bgs = {sage:"rgba(34,197,94,0.15)",warn:"rgba(245,158,11,0.15)",danger:"rgba(239,68,68,0.2)"};
+                return (
+                  <div key={z} onClick={()=>setSelZone(z)} style={{background:bgs[d.status],border:`2px solid ${cols[d.status]}`,borderRadius:14,padding:14,cursor:"pointer",position:"relative",transition:"all 0.2s",transform:selZone===z?"scale(1.02)":"scale(1)"}}>
+                    <div style={{fontSize:28,fontFamily:"var(--f-serif)",fontWeight:500,color:cols[d.status]}}>{z}</div>
+                    <div style={{fontSize:12,marginTop:2,color:"rgba(0,0,0,0.7)"}}>{d.crop}</div>
+                    <div style={{marginTop:8,display:"flex",flexDirection:"column",gap:4}}>
+                      {[{l:"🌡",v:`${d.temp}°C`},{l:"💧",v:`${d.hum}%`},{l:"🌱",v:`${d.soil}%`}].map(x=>(
+                        <div key={x.l} style={{fontFamily:"var(--f-mono)",fontSize:11,display:"flex",justifyContent:"space-between",color:"rgba(0,0,0,0.6)"}}><span>{x.l}</span><span>{x.v}</span></div>
+                      ))}
+                    </div>
+                    {d.alerts>0&&<div style={{position:"absolute",top:8,right:8,width:20,height:20,borderRadius:999,background:"var(--danger)",color:"white",fontSize:10,display:"grid",placeItems:"center",fontFamily:"var(--f-mono)"}}>{d.alerts}</div>}
+                    {d.status==="sage"&&<div style={{position:"absolute",bottom:10,right:10,width:8,height:8,borderRadius:999,background:cols[d.status],boxShadow:`0 0 0 4px rgba(34,197,94,0.3)`}}/>}
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{position:"absolute",bottom:16,left:24,right:24,height:3,background:"rgba(34,197,94,0.3)",borderRadius:2,overflow:"hidden"}}>
+              <div style={{width:"60%",height:"100%",background:"var(--sage-2)",borderRadius:2,animation:"flow 2s linear infinite"}}/>
+            </div>
+            <style>{`@keyframes flow{from{transform:translateX(-100%)}to{transform:translateX(200%)}}`}</style>
+          </div>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:16}}>
+          {selZone ? (
+            <div className="card">
+              <div className="card-h">
+                <div><div className="card-title">Zone {selZone} — {zData[selZone].crop}</div><div className="card-sub">REAL-TIME</div></div>
+                <span className={cx("chip",zData[selZone].status)} style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="ddot"/>{zData[selZone].status}</span>
+              </div>
+              <div className="grid g-2" style={{gap:10}}>
+                {[{l:"Temperature",v:`${zData[selZone].temp}°C`},{l:"Humidity",v:`${zData[selZone].hum}%`},{l:"Soil Moisture",v:`${zData[selZone].soil}%`},{l:"Alerts",v:zData[selZone].alerts||"ไม่มี"}].map(x=>(
+                  <div key={x.l} style={{background:"var(--cream)",padding:"10px 12px",borderRadius:8}}>
+                    <div className="tiny mono uc muted">{x.l}</div>
+                    <div className="mono" style={{fontSize:18,marginTop:4}}>{x.v}</div>
+                  </div>
+                ))}
+              </div>
+              <Sparkline data={series(`twin${selZone}`,24,20,80)} h={50}/>
+              <div className="flex gap-2 mt-3">
+                <button className="btn" style={{flex:1,justifyContent:"center",fontSize:12}} onClick={()=>pushToast("เปิดระบบน้ำ","success")}><I.Wave size={12}/> รดน้ำ</button>
+                <button className="btn" style={{flex:1,justifyContent:"center",fontSize:12}} onClick={()=>pushToast("ดูรายละเอียด","success")}><I.Eye size={12}/> ดูเพิ่ม</button>
+              </div>
+            </div>
+          ) : (
+            <div className="card" style={{textAlign:"center",padding:"32px"}}>
+              <I.Cube size={32} stroke="var(--muted-2)"/>
+              <div className="serif mt-3" style={{fontSize:16}}>คลิก Zone เพื่อดูข้อมูล</div>
+              <div className="small muted mt-2">เลือก Zone บนผัง Digital Twin</div>
+            </div>
+          )}
+          <div className="card">
+            <div className="card-h"><div className="card-title">AI Hotspot Areas</div></div>
+            {[{zone:"C",issue:"ดินแห้ง — ชลประทานเร่งด่วน",tone:"danger"},{zone:"B",issue:"อุณหภูมิสูง — เปิดพัดลม",tone:"warn"}].map((h,i)=>(
+              <div key={i} className="flex-c gap-3" style={{padding:"10px 0",borderBottom:i<1?"1px solid var(--hair-2)":"none"}}>
+                <div style={{width:32,height:32,borderRadius:8,background:`var(--${h.tone}-soft)`,color:`var(--${h.tone})`,display:"grid",placeItems:"center",flexShrink:0}}><I.Alert size={14}/></div>
+                <div className="small ink2">Zone {h.zone} — {h.issue}</div>
+              </div>
+            ))}
+          </div>
+          <div className="card">
+            <div className="card-h"><div className="card-title">Device Status</div></div>
+            {DEVICES.slice(0,4).map((d,i)=>{
+              const Ico = I[d.icon]||I.Device;
+              return (
+                <div key={d.id} className="flex-cb" style={{padding:"8px 0",borderBottom:i<3?"1px solid var(--hair-2)":"none"}}>
+                  <div className="flex-c gap-2"><Ico size={14}/><span className="small">{d.name}</span></div>
+                  <span className={cx("chip",d.on?"sage":"")} style={{display:"inline-flex",alignItems:"center",gap:6}}><span className="ddot"/>{d.on?"ON":"OFF"}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+Object.assign(window, {
+  CommandCenterPage, ExecutiveDashboardPage, AutomationPage, VisionAnalyticsPage,
+  PredictiveAIPage, AIAssistantPage, DroneIntelligencePage, WaterManagementPage,
+  EnergyManagementPage, ProductionPage, InventoryPage, MaintenancePage,
+  NotificationsPage, DigitalTwinPage,
+  DRONE_MISSIONS, WATER_TANKS, ENERGY_DATA, CROPS, INVENTORY, MAINTENANCE,
+  NOTIFICATIONS_DATA, AUTOMATION_RULES,
+});
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 
